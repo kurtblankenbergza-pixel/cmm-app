@@ -3,12 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1,user-scalable=no">
-<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#3D0818">
-<title>Holy Redeemer CMM</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,400&display=swap" rel="stylesheet">
+<meta name="theme-color" content="#2E0810">
+<title>Men's Ministry</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import{getFirestore,collection,getDocs,addDoc,doc,updateDoc,deleteDoc}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
@@ -18,182 +17,127 @@ window._db=db;window._fb={collection,getDocs,addDoc,doc,updateDoc,deleteDoc};
 window._dbReady=true;window.dispatchEvent(new Event('dbready'));
 </script>
 <style>
-/* ─── RESET & TOKENS ─────────────────────────────────────── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
   --b:#7B1230;--b2:#5C0D23;--b3:#2E0810;
   --gold:#C9A96E;--gold2:#E8C98A;
-  --bg:#F5F1EE;--bg2:#EBE6E1;--card:#FFFFFF;
+  --bg:#F5F1EE;--bg2:#EBE6E1;--card:#FFF;
   --text:#18100F;--t2:#6B5B58;--t3:#A8948F;
   --bdr:#E4D8D4;--bdr2:#D5C5C0;
   --green:#1A6B3E;--red:#B83030;--red-bg:#FAEAEA;
   --todo:#2D52C4;--todo-bg:#EEF1FF;
   --prog:#C46B0A;--prog-bg:#FEF5E7;
   --done:#1A6B3E;--done-bg:#E6F4EE;
-  --sh:0 1px 2px rgba(0,0,0,.06),0 2px 8px rgba(0,0,0,.06);
-  --sh2:0 4px 24px rgba(0,0,0,.13);
-  --sh3:0 -1px 0 rgba(0,0,0,.06),0 -8px 24px rgba(0,0,0,.1);
+  --sh:0 1px 2px rgba(0,0,0,.05),0 2px 8px rgba(0,0,0,.06);
+  --sh2:0 4px 24px rgba(0,0,0,.12);
+  --sh3:0 -1px 0 rgba(0,0,0,.05),0 -8px 24px rgba(0,0,0,.1);
   --r:12px;--r2:10px;--r3:8px;
-  /* safe areas */
   --si-top:env(safe-area-inset-top,0px);
   --si-bot:env(safe-area-inset-bottom,0px);
-  /* layout */
-  --topbar:52px;
-  --botbar:56px;
+  --topbar:52px;--botbar:56px;
 }
-
-/* ─── ROOT LAYOUT ─────────────────────────────────────────── */
 html{height:100%;overflow:hidden;background:var(--b3)}
 body{
   font-family:'Inter',sans-serif;font-size:14px;color:var(--text);
   background:var(--bg);
-  /* exact viewport: top bar + content + bottom bar */
   height:calc(100vh - var(--si-bot));
   padding-top:calc(var(--topbar) + var(--si-top));
   padding-bottom:calc(var(--botbar) + var(--si-bot));
   display:flex;flex-direction:column;overflow:hidden;
-  position:relative;
 }
 
-/* ─── TOP BAR ─────────────────────────────────────────────── */
+/* ── TOP BAR ── */
 #topbar{
   position:fixed;top:0;left:0;right:0;z-index:80;
   height:calc(var(--topbar) + var(--si-top));
   padding-top:var(--si-top);
   background:var(--b3);
   display:flex;align-items:center;
-  padding-left:16px;padding-right:16px;gap:10px;
-  border-bottom:1px solid rgba(255,255,255,.07);
+  padding-left:16px;padding-right:14px;gap:10px;
+  border-bottom:1px solid rgba(255,255,255,.06);
 }
-.topbar-logo{display:flex;align-items:center;gap:8px;flex:1;min-width:0}
-.topbar-logo svg{width:30px;height:30px;flex-shrink:0}
-.topbar-name{font-family:'Playfair Display',serif;font-size:15px;color:#F0E4D0;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.topbar-add{
-  flex-shrink:0;
-  background:var(--gold);color:var(--b3);border:none;
-  font-family:'Inter',sans-serif;font-size:13px;font-weight:700;letter-spacing:.1px;
-  height:34px;padding:0 16px;border-radius:20px;cursor:pointer;
-  display:flex;align-items:center;gap:5px;transition:opacity .15s;
+.tb-logo{display:flex;align-items:center;gap:9px;flex:1;min-width:0}
+.tb-cross svg{width:26px;height:26px;flex-shrink:0}
+.tb-name{font-family:'Playfair Display',serif;font-size:14px;color:rgba(240,228,208,.9);font-weight:500;letter-spacing:.1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tb-add{
+  flex-shrink:0;background:var(--gold);color:var(--b3);border:none;
+  font-family:'Inter',sans-serif;font-size:13px;font-weight:700;
+  height:34px;padding:0 15px;border-radius:20px;cursor:pointer;
+  display:flex;align-items:center;gap:5px;letter-spacing:.1px;
 }
-.topbar-add:active{opacity:.8}
-.topbar-add svg{width:13px;height:13px;stroke:var(--b3);stroke-width:2.5;fill:none;flex-shrink:0}
+.tb-add:active{opacity:.8;transform:scale(.96)}
+.tb-add svg{width:13px;height:13px;stroke:var(--b3);stroke-width:2.8;fill:none}
 
-/* ─── BOTTOM NAV ──────────────────────────────────────────── */
+/* ── BOTTOM NAV ── */
 #botnav{
   position:fixed;bottom:0;left:0;right:0;z-index:80;
   height:calc(var(--botbar) + var(--si-bot));
   padding-bottom:var(--si-bot);
   background:var(--b3);
-  border-top:1px solid rgba(255,255,255,.07);
+  border-top:1px solid rgba(255,255,255,.06);
   display:flex;
 }
 .nt{
-  flex:1;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;gap:3px;
-  background:none;border:none;cursor:pointer;
-  color:rgba(240,228,208,.35);
-  font-family:'Inter',sans-serif;
-  padding:6px 0;position:relative;
-  transition:color .18s;
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:3px;background:none;border:none;cursor:pointer;
+  color:rgba(240,228,208,.3);font-family:'Inter',sans-serif;
+  padding:6px 0;position:relative;transition:color .18s;
 }
 .nt.on{color:var(--gold)}
-.nt-ico{
-  width:24px;height:24px;display:flex;align-items:center;justify-content:center;
-  position:relative;
-}
+.nt-ico{width:24px;height:24px;display:flex;align-items:center;justify-content:center;position:relative}
 .nt-ico svg{width:22px;height:22px;stroke:currentColor;stroke-width:1.7;fill:none;transition:stroke-width .18s}
 .nt.on .nt-ico svg{stroke-width:2.3}
-.nt-lbl{font-size:9px;font-weight:600;letter-spacing:.3px;text-transform:uppercase;line-height:1}
+.nt-lbl{font-size:9px;font-weight:600;letter-spacing:.3px;text-transform:uppercase}
 .nt-dot{
-  position:absolute;top:-2px;right:-4px;
-  background:var(--red);color:#fff;
-  font-size:8px;font-weight:700;line-height:1;
-  min-width:14px;height:14px;border-radius:7px;padding:0 3px;
+  position:absolute;top:-3px;right:-5px;
+  background:var(--red);color:#fff;font-size:8px;font-weight:700;
+  min-width:15px;height:15px;border-radius:8px;padding:0 3px;
   display:flex;align-items:center;justify-content:center;
-  border:1.5px solid var(--b3);
+  border:2px solid var(--b3);line-height:1;
 }
 
-/* ─── PAGE CONTENT ────────────────────────────────────────── */
+/* ── PAGE ── */
 #app{flex:1;overflow:hidden;display:flex;flex-direction:column;min-height:0}
 .pg{display:flex;flex-direction:column;height:100%;overflow:hidden}
-
-/* secondary header inside a page */
-.pg-hdr{
-  display:flex;align-items:center;gap:8px;
-  padding:11px 16px;flex-shrink:0;
-  background:var(--card);
-  border-bottom:1px solid var(--bdr);
-}
+.pg-hdr{display:flex;align-items:center;gap:8px;padding:11px 16px;flex-shrink:0;background:var(--card);border-bottom:1px solid var(--bdr)}
 .pg-title{font-family:'Playfair Display',serif;font-size:19px;font-weight:500;flex:1}
-
-/* scrollable area — fills remaining space */
 .scrl{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
 .scrl::-webkit-scrollbar{display:none}
 .pad{padding:14px 16px}
 
-/* ─── CAL NAV ─────────────────────────────────────────────── */
-.cal-nav{
-  display:flex;align-items:center;gap:0;
-  padding:0 16px;height:48px;flex-shrink:0;
-  background:var(--card);border-bottom:1px solid var(--bdr);
-}
-.cal-arrow{
-  width:34px;height:34px;border-radius:50%;border:none;
-  background:none;color:var(--text);font-size:18px;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;flex-shrink:0;
-  transition:background .15s;
-}
-.cal-arrow:active{background:var(--bg2)}
-.cal-title{flex:1;text-align:center;font-family:'Playfair Display',serif;font-size:16px;font-weight:500;color:var(--text)}
-.today-btn{
-  background:none;border:1.5px solid var(--bdr2);color:var(--t2);
-  font-family:'Inter',sans-serif;font-size:11px;font-weight:600;
-  padding:5px 11px;border-radius:20px;cursor:pointer;flex-shrink:0;
-  transition:all .15s;
-}
-.today-btn:active{border-color:var(--b);color:var(--b)}
+/* ── CAL NAV ── */
+.cal-nav{display:flex;align-items:center;gap:0;padding:0 16px;height:46px;flex-shrink:0;background:var(--card);border-bottom:1px solid var(--bdr)}
+.c-arrow{width:32px;height:32px;border-radius:50%;border:none;background:none;color:var(--text);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.c-arrow:active{background:var(--bg2)}
+.c-title{flex:1;text-align:center;font-family:'Playfair Display',serif;font-size:16px;font-weight:500}
+.c-today{background:none;border:1.5px solid var(--bdr2);color:var(--t2);font-family:'Inter',sans-serif;font-size:11px;font-weight:600;padding:4px 11px;border-radius:20px;cursor:pointer;flex-shrink:0}
+.c-today:active{border-color:var(--b);color:var(--b)}
 
-/* ─── PILL STRIP ──────────────────────────────────────────── */
-.pill-strip{
-  display:flex;gap:6px;overflow-x:auto;
-  padding:9px 16px;flex-shrink:0;
-  background:var(--card);border-bottom:1px solid var(--bdr);
-  scrollbar-width:none;
-}
-.pill-strip::-webkit-scrollbar{display:none}
-.pi{
-  flex-shrink:0;background:none;
-  border:1.5px solid var(--bdr);color:var(--t2);
-  font-family:'Inter',sans-serif;font-size:12px;font-weight:600;
-  padding:6px 14px;border-radius:20px;cursor:pointer;
-  white-space:nowrap;transition:all .15s;
-}
+/* ── PILLS ── */
+.pills{display:flex;gap:6px;overflow-x:auto;padding:8px 16px;flex-shrink:0;background:var(--card);border-bottom:1px solid var(--bdr);scrollbar-width:none}
+.pills::-webkit-scrollbar{display:none}
+.pi{flex-shrink:0;background:none;border:1.5px solid var(--bdr);color:var(--t2);font-family:'Inter',sans-serif;font-size:12px;font-weight:600;padding:6px 14px;border-radius:20px;cursor:pointer;white-space:nowrap;transition:all .15s}
 .pi.on{background:var(--b);border-color:var(--b);color:#fff}
 .pi:active{transform:scale(.94)}
 
-/* ─── AGENDA ──────────────────────────────────────────────── */
+/* ── AGENDA ── */
 .ag-sec{margin-bottom:20px}
-.ag-mlbl{font-family:'Playfair Display',serif;font-size:17px;font-weight:500;margin-bottom:10px;padding-bottom:7px;border-bottom:2px solid var(--bdr)}
+.ag-mlbl{font-family:'Playfair Display',serif;font-size:17px;font-weight:500;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid var(--bdr)}
 .ag-day{display:flex;gap:10px;margin-bottom:2px}
 .ag-dc{width:40px;flex-shrink:0;text-align:right;padding-top:2px}
-.ag-dn{font-size:21px;font-weight:300;color:var(--t2);line-height:1}
+.ag-dn{font-size:20px;font-weight:300;color:var(--t2);line-height:1}
 .ag-dd{font-size:9px;text-transform:uppercase;letter-spacing:.7px;color:var(--t3);font-weight:600;margin-top:2px}
 .ag-dc.tod .ag-dn{color:var(--b);font-weight:700}
 .ag-evts{flex:1;border-left:2px solid var(--bdr);padding-left:11px;padding-bottom:12px}
-.ag-card{
-  background:var(--card);border-radius:var(--r);
-  padding:11px 12px;margin-bottom:7px;cursor:pointer;
-  border:1px solid var(--bdr);display:flex;gap:10px;
-  box-shadow:var(--sh);
-}
-.ag-card:active{transform:scale(.985);opacity:.9}
-.ag-bar{width:3px;border-radius:2px;flex-shrink:0;align-self:stretch;min-height:28px}
+.ag-card{background:var(--card);border-radius:var(--r);padding:11px 12px;margin-bottom:7px;cursor:pointer;border:1px solid var(--bdr);display:flex;gap:9px;box-shadow:var(--sh)}
+.ag-card:active{transform:scale(.985);opacity:.85}
+.ag-bar{width:3px;border-radius:2px;flex-shrink:0;align-self:stretch;min-height:26px}
 .ag-cnt{flex:1;min-width:0}
 .ag-ttl{font-size:13px;font-weight:600;margin-bottom:3px;line-height:1.35}
 .ag-meta{display:flex;gap:5px;align-items:center;flex-wrap:wrap}
 .ag-tag{font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;text-transform:uppercase;letter-spacing:.3px}
 .ag-plc{font-size:11px;color:var(--t3)}
-.ag-nxt{font-size:11px;color:var(--t2);margin-top:5px;padding:5px 8px;background:var(--bg);border-radius:6px;border-left:3px solid transparent}
+.ag-nxt{font-size:11px;color:var(--t2);margin-top:5px;padding:5px 8px;background:var(--bg);border-radius:6px;border-left:3px solid}
 .ag-nxt-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:1px}
 .ag-fr{margin-top:6px}
 .ag-fr-row{display:flex;justify-content:space-between;font-size:10px;color:var(--t3);margin-bottom:2px}
@@ -204,18 +148,19 @@ body{
 .av{width:22px;height:22px;border-radius:50%;background:var(--b);color:var(--gold);font-size:8px;font-weight:700;display:flex;align-items:center;justify-content:center;border:2px solid var(--card);margin-left:-5px;flex-shrink:0}
 .av:first-child{margin-left:0}
 
-/* ─── MONTH ───────────────────────────────────────────────── */
-.month-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--bdr);border-radius:var(--r);overflow:hidden}
-.mh{background:var(--card);text-align:center;padding:7px 2px;font-size:9px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--t3)}
-.mc{background:var(--card);min-height:64px;padding:4px 3px;cursor:pointer}
+/* ── MONTH ── */
+.month-wrap{width:100%}
+.month-grid{display:grid;grid-template-columns:repeat(7,1fr);border:1px solid var(--bdr);border-radius:var(--r);overflow:hidden;background:var(--bdr);gap:1px}
+.mh{background:var(--bg2);text-align:center;padding:7px 0;font-size:9px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--t3)}
+.mc{background:var(--card);min-height:60px;padding:4px 3px;cursor:pointer;overflow:hidden}
 .mc:active{background:var(--bg2)}
-.mc.om{background:var(--bg);opacity:.5}
-.mc.tod .mdn{background:var(--b);color:#fff;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center}
-.mdn{font-size:10px;font-weight:500;color:var(--t2);margin-bottom:2px;width:18px;height:18px;display:flex;align-items:center;justify-content:center}
-.mec{font-size:8px;padding:1px 3px;border-radius:2px;margin-bottom:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600;line-height:1.4}
-.mmore{font-size:8px;color:var(--t3);padding:0 2px;font-weight:500}
+.mc.om{background:#F8F5F2;opacity:.6}
+.mc.tod .mdn{background:var(--b);color:#fff;border-radius:50%;width:19px;height:19px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700}
+.mdn{font-size:10px;font-weight:500;color:var(--t2);margin-bottom:2px;width:19px;height:19px;display:flex;align-items:center;justify-content:center}
+.mec{font-size:8px;padding:1px 3px;border-radius:2px;margin-bottom:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600;line-height:1.4;display:block}
+.mmore{font-size:8px;color:var(--t3);padding:0 1px;font-weight:500}
 
-/* ─── WEEK ────────────────────────────────────────────────── */
+/* ── WEEK ── */
 .wk-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
 .wk-col{background:var(--card);border-radius:var(--r3);border:1px solid var(--bdr);overflow:hidden}
 .wk-col.tod{border-color:var(--b);border-width:2px}
@@ -225,53 +170,36 @@ body{
 .wk-col.tod .wk-dd{color:var(--b);font-weight:600}
 .wk-evts{padding:4px;min-height:60px}
 .wk-chip{padding:3px 4px;border-radius:3px;margin-bottom:2px;cursor:pointer;font-size:8px;font-weight:600;display:block;line-height:1.3}
-.wk-plus{background:none;border:1px dashed var(--bdr);color:var(--t3);width:100%;padding:2px;border-radius:3px;cursor:pointer;font-size:13px;margin-top:2px}
+.wk-plus{background:none;border:1px dashed var(--bdr);color:var(--t3);width:100%;padding:2px;border-radius:3px;cursor:pointer;font-size:12px;margin-top:2px}
 
-/* ─── KANBAN ──────────────────────────────────────────────── */
+/* ── KANBAN ── */
 .kb-wrap{flex:1;display:flex;flex-direction:column;overflow:hidden;min-height:0}
-/* on mobile: vertical stacked scroll */
-.kb-body{flex:1;overflow-y:auto;padding:12px 16px;display:flex;flex-direction:column;gap:14px;-webkit-overflow-scrolling:touch}
+.kb-body{flex:1;overflow-y:auto;padding:12px 16px;display:flex;flex-direction:column;gap:12px;-webkit-overflow-scrolling:touch}
 .kb-body::-webkit-scrollbar{display:none}
 .kb-col{background:var(--bg2);border-radius:var(--r);overflow:hidden}
-.kb-hd{padding:10px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(0,0,0,.07)}
-.kb-htitle{font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase}
-.kb-hcnt{font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px}
-.kb-todo .kb-htitle{color:var(--todo)}.kb-todo .kb-hcnt{background:var(--todo-bg);color:var(--todo)}
-.kb-prog .kb-htitle{color:var(--prog)}.kb-prog .kb-hcnt{background:var(--prog-bg);color:var(--prog)}
-.kb-done .kb-htitle{color:var(--done)}.kb-done .kb-hcnt{background:var(--done-bg);color:var(--done)}
+.kb-hd{padding:10px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(0,0,0,.06)}
+.kb-ht{font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase}
+.kb-hc{font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px}
+.kb-todo .kb-ht{color:var(--todo)}.kb-todo .kb-hc{background:var(--todo-bg);color:var(--todo)}
+.kb-prog .kb-ht{color:var(--prog)}.kb-prog .kb-hc{background:var(--prog-bg);color:var(--prog)}
+.kb-done .kb-ht{color:var(--done)}.kb-done .kb-hc{background:var(--done-bg);color:var(--done)}
 .kb-cards{padding:8px}
-.kb-add{
-  background:none;border:1.5px dashed var(--bdr);color:var(--t3);
-  width:100%;padding:8px;border-radius:var(--r3);cursor:pointer;
-  font-size:12px;margin-bottom:7px;font-family:'Inter',sans-serif;
-  display:flex;align-items:center;justify-content:center;gap:5px;
-}
+.kb-add{background:none;border:1.5px dashed var(--bdr);color:var(--t3);width:100%;padding:8px;border-radius:var(--r3);cursor:pointer;font-size:12px;margin-bottom:7px;font-family:'Inter',sans-serif;display:flex;align-items:center;justify-content:center;gap:4px}
 .kb-add:active{border-color:var(--b);color:var(--b)}
-.tk-card{
-  background:var(--card);border-radius:var(--r3);padding:11px 12px;
-  margin-bottom:6px;cursor:pointer;border:1px solid var(--bdr);
-  box-shadow:var(--sh);position:relative;
-}
-.tk-card:active{transform:scale(.98);opacity:.85}
+.tk-card{background:var(--card);border-radius:var(--r3);padding:11px 12px;margin-bottom:6px;cursor:pointer;border:1px solid var(--bdr);box-shadow:var(--sh);position:relative}
+.tk-card:active{transform:scale(.98)}
 .tk-ttl{font-size:13px;font-weight:600;margin-bottom:5px;line-height:1.4;padding-right:22px}
 .tk-meta{display:flex;gap:5px;align-items:center;flex-wrap:wrap}
 .tk-pri{font-size:9px;font-weight:700;letter-spacing:.3px;text-transform:uppercase;padding:2px 7px;border-radius:20px}
-.hi{background:#FDECEA;color:#B83030}
-.mi{background:#FEF5E7;color:#C46B0A}
-.lo{background:var(--done-bg);color:var(--done)}
-.tk-due{font-size:10px;color:var(--t3)}
-.tk-due.od{color:var(--red);font-weight:600}
+.hi{background:#FDECEA;color:#B83030}.mi{background:#FEF5E7;color:#C46B0A}.lo{background:var(--done-bg);color:var(--done)}
+.tk-due{font-size:10px;color:var(--t3)}.tk-due.od{color:var(--red);font-weight:600}
 .tk-ev{font-size:9px;color:var(--b);background:#F5E8EC;padding:2px 6px;border-radius:20px;font-weight:600;margin-top:4px;display:inline-block}
 .tk-avs{display:flex;position:absolute;top:10px;right:10px}
 .tk-notes{font-size:10px;color:var(--t3);margin-top:4px;line-height:1.4;border-top:1px solid var(--bdr);padding-top:4px}
 
-/* ─── MEETINGS ────────────────────────────────────────────── */
-.mtg-card{
-  background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);
-  padding:13px 14px;cursor:pointer;display:flex;gap:12px;margin-bottom:8px;
-  box-shadow:var(--sh);
-}
-.mtg-card:active{transform:scale(.985);opacity:.9}
+/* ── MEETINGS ── */
+.mtg-card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:13px 14px;cursor:pointer;display:flex;gap:12px;margin-bottom:8px;box-shadow:var(--sh)}
+.mtg-card:active{transform:scale(.985);opacity:.85}
 .mtg-db{width:44px;flex-shrink:0;text-align:center;background:var(--bg);border-radius:var(--r3);padding:7px 4px}
 .mtg-dd{font-size:9px;text-transform:uppercase;letter-spacing:.6px;color:var(--t3);font-weight:700}
 .mtg-dn{font-size:20px;font-weight:300;color:var(--text);line-height:1;margin-top:2px}
@@ -280,26 +208,26 @@ body{
 .mtg-ttl{font-size:13px;font-weight:600;margin-bottom:3px}
 .mtg-meta{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:5px}
 .mtg-plc{font-size:11px;color:var(--t3)}
-.mtg-nxt{background:var(--bg);border-radius:6px;padding:6px 8px;font-size:11px;color:var(--t2);border-left:3px solid var(--b)}
-.mtg-nlbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--b);margin-bottom:1px}
+.mtg-box{background:var(--bg);border-radius:6px;padding:6px 8px;font-size:11px;color:var(--t2);border-left:3px solid var(--bdr);margin-top:4px}
+.mtg-box-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--b);margin-bottom:1px}
 .mtg-avs{display:flex;margin-top:6px}
 .slbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--t3);margin-bottom:8px}
 
-/* ─── FUNDRAISING ─────────────────────────────────────────── */
-.fr-hero{background:linear-gradient(140deg,var(--b3) 0%,var(--b) 100%);border-radius:var(--r);padding:18px;margin-bottom:14px;color:#fff}
+/* ── FUNDRAISING ── */
+.fr-hero{background:linear-gradient(140deg,var(--b3),var(--b));border-radius:var(--r);padding:18px;margin-bottom:14px;color:#fff}
 .fr-hl{font-size:10px;font-weight:600;opacity:.55;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:5px}
-.fr-ht{font-size:40px;font-weight:300;line-height:1;margin-bottom:3px}
-.fr-ht small{font-size:16px;opacity:.45}
+.fr-ht{font-size:38px;font-weight:300;line-height:1;margin-bottom:3px}
+.fr-ht small{font-size:15px;opacity:.45}
 .fr-hs{font-size:11px;opacity:.55;margin-bottom:12px}
 .fr-hbar{height:6px;background:rgba(255,255,255,.15);border-radius:3px;overflow:hidden}
 .fr-hfill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));border-radius:3px}
 .fr-stats{display:flex;margin-top:12px}
 .fr-st{flex:1;text-align:center}
-.fr-sv{font-size:17px;font-weight:600;color:var(--gold);line-height:1}
+.fr-sv{font-size:16px;font-weight:600;color:var(--gold);line-height:1}
 .fr-sl{font-size:9px;opacity:.45;text-transform:uppercase;letter-spacing:.7px;margin-top:2px}
 .fr-slbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--t3);margin-bottom:9px}
 .fr-card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:13px;cursor:pointer;margin-bottom:8px;box-shadow:var(--sh)}
-.fr-card:active{transform:scale(.985);opacity:.9}
+.fr-card:active{transform:scale(.985)}
 .fr-ctop{display:flex;align-items:flex-start;gap:10px;margin-bottom:9px}
 .fr-cico{width:36px;height:36px;border-radius:9px;background:var(--b);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
 .fr-cinfo{flex:1;min-width:0}
@@ -313,108 +241,64 @@ body{
 .fr-cfoot{display:flex;justify-content:space-between;align-items:center}
 .fr-cpct{font-size:11px;font-weight:600;color:var(--green)}
 
-/* ─── MEN ─────────────────────────────────────────────────── */
-.bday-strip{
-  background:linear-gradient(140deg,var(--b3) 0%,var(--b) 100%);
-  border-radius:var(--r);padding:11px 12px;margin-bottom:12px;
-  display:flex;gap:9px;overflow-x:auto;
-  -webkit-overflow-scrolling:touch;scrollbar-width:none;
-}
+/* ── MEN ── */
+.bday-strip{background:linear-gradient(140deg,var(--b3),var(--b));border-radius:var(--r);padding:11px 12px;margin-bottom:12px;display:flex;gap:9px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 .bday-strip::-webkit-scrollbar{display:none}
 .bday-card{background:rgba(255,255,255,.09);border-radius:var(--r3);padding:9px 12px;flex-shrink:0;text-align:center;min-width:74px}
 .bday-n{font-size:10px;font-weight:600;color:#F0E4D0;white-space:nowrap}
 .bday-dt{font-size:9px;color:var(--gold);margin-top:1px}
-.bday-cnt{font-size:21px;font-weight:300;color:#fff;margin-top:2px;line-height:1}
+.bday-cnt{font-size:20px;font-weight:300;color:#fff;margin-top:2px;line-height:1}
 .bday-lbl{font-size:8px;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.6px}
 .vtog{display:flex;background:var(--bg2);border-radius:var(--r3);padding:2px;gap:1px}
-.vt{background:none;border:none;padding:5px 10px;border-radius:6px;cursor:pointer;color:var(--t3);font-size:13px;transition:all .15s}
+.vt{background:none;border:none;padding:5px 9px;border-radius:6px;cursor:pointer;color:var(--t3);font-size:13px;transition:all .15s}
 .vt.on{background:var(--card);color:var(--text);box-shadow:var(--sh)}
+.sort-btns{display:flex;gap:5px}
+.sort-btn{background:none;border:1.5px solid var(--bdr);color:var(--t2);font-size:10px;font-weight:600;padding:4px 10px;border-radius:20px;cursor:pointer;white-space:nowrap;transition:all .15s}
+.sort-btn.on{background:var(--b);border-color:var(--b);color:#fff}
 .mem-list{display:flex;flex-direction:column;gap:5px}
-.mem-row{
-  background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);
-  padding:11px 12px;display:flex;align-items:center;gap:10px;cursor:pointer;
-  box-shadow:var(--sh);
-}
-.mem-row:active{transform:scale(.985);opacity:.9}
+.mem-row{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:11px 12px;display:flex;align-items:center;gap:10px;cursor:pointer;box-shadow:var(--sh)}
+.mem-row:active{transform:scale(.985)}
 .mem-av{width:38px;height:38px;border-radius:50%;background:var(--b);color:var(--gold);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .mem-info{flex:1;min-width:0}
 .mem-name{font-size:13px;font-weight:600}
 .mem-sub{font-size:11px;color:var(--t3);margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.mem-right{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.mem-right{display:flex;align-items:center;gap:5px;flex-shrink:0}
 .mem-age{background:var(--bg2);border-radius:20px;padding:3px 8px;font-size:10px;font-weight:600;color:var(--t2)}
 .mem-rdot{width:7px;height:7px;border-radius:50%;background:var(--red);flex-shrink:0}
 .mem-tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}
 .mem-tile{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:16px 10px;text-align:center;cursor:pointer;box-shadow:var(--sh)}
-.mem-tile:active{transform:scale(.97);opacity:.9}
+.mem-tile:active{transform:scale(.97)}
 .mem-tav{width:46px;height:46px;border-radius:50%;background:var(--b);color:var(--gold);font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto 7px}
 .mem-tname{font-size:12px;font-weight:600;margin-bottom:2px}
 .mem-tsub{font-size:10px;color:var(--t3)}
-.mem-tbadge{font-size:9px;padding:2px 6px;border-radius:20px;font-weight:700;margin-top:4px;display:inline-block;background:var(--bg2);color:var(--t2)}
-.srch{
-  display:flex;align-items:center;background:var(--bg2);border-radius:10px;
-  padding:9px 12px;gap:8px;
-}
+.mem-tbdg{font-size:9px;padding:2px 6px;border-radius:20px;font-weight:700;margin-top:4px;display:inline-block;background:var(--bg2);color:var(--t2)}
+.srch{display:flex;align-items:center;background:var(--bg2);border-radius:10px;padding:9px 12px;gap:8px}
 .srch svg{width:15px;height:15px;stroke:var(--t3);fill:none;flex-shrink:0;stroke-width:2}
 .srch input{background:none;border:none;outline:none;font-family:'Inter',sans-serif;font-size:14px;color:var(--text);flex:1;min-width:0}
 .srch input::placeholder{color:var(--t3)}
 
-/* ─── MODAL ───────────────────────────────────────────────── */
-/* pure overlay — covers entire viewport including top+bottom bars */
-.ov{
-  position:fixed;inset:0;z-index:200;
-  background:rgba(20,8,5,.65);
-  display:none;
-  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
-}
+/* ── SHEET (bottom modal) ── */
+.ov{position:fixed;inset:0;z-index:200;background:rgba(20,8,5,.65);display:none;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 .ov.on{display:block}
-
-/* bottom sheet */
-.sheet{
-  position:fixed;left:0;right:0;bottom:0;z-index:201;
-  background:var(--card);
-  border-radius:20px 20px 0 0;
-  display:none;flex-direction:column;
-  max-height:88vh;
-  box-shadow:var(--sh3);
-  padding-bottom:var(--si-bot);
-}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:201;background:var(--card);border-radius:20px 20px 0 0;display:none;flex-direction:column;max-height:90vh;box-shadow:var(--sh3);padding-bottom:var(--si-bot)}
 .sheet.on{display:flex}
-.sheet-drag{width:38px;height:4px;background:var(--bdr2);border-radius:2px;margin:10px auto 0;flex-shrink:0}
-.sheet-hdr{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:12px 18px 10px;flex-shrink:0;
-}
-.sheet-hdr h2{font-family:'Playfair Display',serif;font-size:19px;font-weight:500}
-.sheet-x{
-  background:var(--bg2);border:none;
-  width:28px;height:28px;border-radius:50%;
-  cursor:pointer;font-size:14px;color:var(--t2);
-  display:flex;align-items:center;justify-content:center;
-}
-.sheet-x:active{background:var(--bdr)}
-.sheet-body{overflow-y:auto;padding:0 18px 10px;flex:1;-webkit-overflow-scrolling:touch}
-.sheet-body::-webkit-scrollbar{display:none}
+.sh-drag{width:38px;height:4px;background:var(--bdr2);border-radius:2px;margin:10px auto 0;flex-shrink:0}
+.sh-hdr{display:flex;justify-content:space-between;align-items:center;padding:12px 18px 10px;flex-shrink:0}
+.sh-hdr h2{font-family:'Playfair Display',serif;font-size:19px;font-weight:500}
+.sh-x{background:var(--bg2);border:none;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:14px;color:var(--t2);display:flex;align-items:center;justify-content:center}
+.sh-x:active{background:var(--bdr)}
+.sh-body{overflow-y:auto;padding:0 18px 10px;flex:1;-webkit-overflow-scrolling:touch}
+.sh-body::-webkit-scrollbar{display:none}
 .flds{display:flex;flex-direction:column;gap:12px}
 .frow{display:flex;gap:10px}
 .frow .f{flex:1}
 .f{display:flex;flex-direction:column;gap:4px}
 .f label{font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--t2)}
-.f input,.f select,.f textarea{
-  border:1.5px solid var(--bdr);border-radius:var(--r3);
-  padding:11px 13px;font-family:'Inter',sans-serif;font-size:15px;
-  color:var(--text);background:var(--bg);outline:none;width:100%;
-  -webkit-appearance:none;transition:border-color .15s;
-}
+.f input,.f select,.f textarea{border:1.5px solid var(--bdr);border-radius:var(--r3);padding:11px 13px;font-family:'Inter',sans-serif;font-size:15px;color:var(--text);background:var(--bg);outline:none;width:100%;-webkit-appearance:none;transition:border-color .15s}
 .f input:focus,.f select:focus,.f textarea:focus{border-color:var(--b);background:var(--card)}
 .f textarea{min-height:64px;resize:none;line-height:1.5}
 .mpc{display:flex;flex-wrap:wrap;gap:6px}
-.mp{
-  display:flex;align-items:center;gap:5px;
-  padding:7px 12px 7px 7px;border-radius:22px;
-  background:var(--bg);border:1.5px solid var(--bdr);
-  cursor:pointer;font-size:12px;font-weight:500;user-select:none;
-  transition:all .15s;
-}
+.mp{display:flex;align-items:center;gap:5px;padding:7px 12px 7px 7px;border-radius:22px;background:var(--bg);border:1.5px solid var(--bdr);cursor:pointer;font-size:12px;font-weight:500;user-select:none;transition:all .15s}
 .mp:active{transform:scale(.94)}
 .mp.on{background:var(--b);border-color:var(--b);color:#fff}
 .mp-av{width:18px;height:18px;border-radius:50%;background:var(--b2);color:var(--gold);font-size:7px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
@@ -422,129 +306,82 @@ body{
 .ck{display:flex;align-items:center;gap:9px;padding:2px 0}
 .ck input[type=checkbox]{width:18px;height:18px;accent-color:var(--b);flex-shrink:0;cursor:pointer}
 .ck label{font-size:14px;font-weight:500;color:var(--text);cursor:pointer}
-.sheet-ftr{
-  display:flex;gap:8px;padding:12px 18px;
-  border-top:1px solid var(--bdr);flex-shrink:0;
-}
+.sh-ftr{display:flex;gap:8px;padding:12px 18px;border-top:1px solid var(--bdr);flex-shrink:0}
 .btn-d{background:none;color:var(--red);border:1.5px solid var(--red);padding:11px 14px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;flex-shrink:0}
 .btn-d:active{background:var(--red-bg)}
 .btn-c{background:var(--bg2);color:var(--t2);border:none;padding:11px 14px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer}
 .btn-s{background:var(--b);color:#fff;border:none;padding:11px 0;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;flex:1}
 .btn-s:active{background:var(--b2)}
 
-/* ─── ADD SHEET ───────────────────────────────────────────── */
-.add-sheet{
-  position:fixed;left:0;right:0;bottom:0;z-index:300;
-  background:var(--card);border-radius:20px 20px 0 0;
-  display:none;padding:10px 16px;
-  padding-bottom:calc(16px + var(--si-bot));
-  box-shadow:var(--sh3);
-}
-.add-sheet.on{display:block}
+/* ── ADD SHEET ── */
+.aov{position:fixed;inset:0;z-index:299;background:rgba(20,8,5,.5);display:none;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.aov.on{display:block}
+.add-sh{position:fixed;left:0;right:0;bottom:0;z-index:300;background:var(--card);border-radius:20px 20px 0 0;display:none;padding:10px 16px;padding-bottom:calc(14px + var(--si-bot));box-shadow:var(--sh3)}
+.add-sh.on{display:block}
 .add-drag{width:38px;height:4px;background:var(--bdr2);border-radius:2px;margin:0 auto 12px}
-.add-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.ao{
-  background:var(--bg);border:1.5px solid var(--bdr);border-radius:var(--r);
-  padding:14px 12px;cursor:pointer;display:flex;flex-direction:column;gap:3px;
-}
+.add-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.ao{background:var(--bg);border:1.5px solid var(--bdr);border-radius:var(--r);padding:14px 12px;cursor:pointer;display:flex;flex-direction:column;gap:3px}
 .ao:active{border-color:var(--b);background:var(--card);transform:scale(.97)}
 .ao-ico{font-size:22px}
 .ao-lbl{font-size:13px;font-weight:700;color:var(--text)}
 .ao-sub{font-size:10px;color:var(--t3)}
 
-/* ─── PASSWORD ────────────────────────────────────────────── */
-#pw{
-  position:fixed;inset:0;z-index:999;
-  background:var(--b3);
-  display:flex;align-items:center;justify-content:center;
-  padding:24px;
-}
+/* ── PASSWORD ── */
+#pw{position:fixed;inset:0;z-index:999;background:var(--b3);display:flex;align-items:center;justify-content:center;padding:24px}
 #pw.gone{display:none}
-.pw-box{display:flex;flex-direction:column;align-items:center;gap:18px;width:100%;max-width:310px}
-.pw-logo{width:74px;height:74px;background:rgba(255,255,255,.06);border-radius:22px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.1)}
-.pw-title{font-family:'Playfair Display',serif;font-size:21px;color:#F0E4D0;font-weight:500;text-align:center;line-height:1.35}
-.pw-sub{font-size:12px;color:rgba(240,228,208,.38);text-align:center;margin-top:-10px}
-.pw-in{
-  width:100%;background:rgba(255,255,255,.07);
-  border:1.5px solid rgba(255,255,255,.11);border-radius:12px;
-  padding:14px 18px;font-family:'Inter',sans-serif;font-size:17px;
-  color:#F0E4D0;outline:none;text-align:center;letter-spacing:4px;
-  -webkit-appearance:none;
-}
+.pw-box{display:flex;flex-direction:column;align-items:center;gap:20px;width:100%;max-width:300px}
+.pw-cross{margin-bottom:4px}
+.pw-title{font-family:'Playfair Display',serif;font-size:15px;color:rgba(240,228,208,.55);font-weight:400;text-align:center;letter-spacing:.2px}
+.pw-name{font-family:'Playfair Display',serif;font-size:19px;color:#F0E4D0;font-weight:500;text-align:center;line-height:1.4;margin-top:-12px}
+.pw-in{width:100%;background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.11);border-radius:12px;padding:14px 18px;font-family:'Inter',sans-serif;font-size:17px;color:#F0E4D0;outline:none;text-align:center;letter-spacing:4px;-webkit-appearance:none}
 .pw-in::placeholder{letter-spacing:0;font-size:14px;color:rgba(240,228,208,.28)}
 .pw-in:focus{border-color:var(--gold)}
-.pw-btn{
-  width:100%;background:var(--gold);color:var(--b3);border:none;
-  border-radius:12px;padding:14px;font-family:'Inter',sans-serif;
-  font-size:16px;font-weight:700;cursor:pointer;
-}
+.pw-btn{width:100%;background:var(--gold);color:var(--b3);border:none;border-radius:12px;padding:14px;font-family:'Inter',sans-serif;font-size:16px;font-weight:700;cursor:pointer}
 .pw-btn:active{background:var(--gold2);transform:scale(.97)}
 .pw-err{font-size:12px;color:#FF8A80;text-align:center;min-height:16px}
 
-/* ─── LOADING ─────────────────────────────────────────────── */
+/* ── LOADING ── */
 #dbl{position:fixed;inset:0;z-index:998;background:var(--b3);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px}
 #dbl.gone{display:none}
 .dbl-spin{width:28px;height:28px;border:2.5px solid rgba(201,169,110,.15);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .dbl-txt{font-size:12px;color:rgba(240,228,208,.35)}
-
-/* ─── EMPTY ───────────────────────────────────────────────── */
 .empty{text-align:center;padding:50px 20px;color:var(--t3)}
-.empty-ico{font-size:44px;margin-bottom:10px;opacity:.22}
+.empty-ico{font-size:44px;margin-bottom:10px;opacity:.2}
 .empty-txt{font-size:13px;font-weight:500}
 
-/* ─── DESKTOP ─────────────────────────────────────────────── */
+/* ── DESKTOP ── */
 @media(min-width:640px){
-  body{
-    padding-top:0;padding-bottom:0;
-    flex-direction:row;height:100vh;
-  }
-  #topbar{
-    position:static;height:100vh;width:64px;
-    flex-direction:column;justify-content:flex-start;
-    padding:16px 0 16px;border-bottom:none;
-    border-right:1px solid rgba(255,255,255,.07);
-    gap:0;overflow:hidden;
-  }
-  .topbar-logo{flex-direction:column;gap:0;padding:10px 0 16px;justify-content:center;width:100%;border-bottom:1px solid rgba(255,255,255,.08)}
-  .topbar-logo svg{width:32px;height:32px}
-  .topbar-name{display:none}
-  .topbar-add{display:none}
-  #botnav{
-    position:static;height:100%;width:64px;flex-direction:column;
-    border-top:none;border-right:1px solid rgba(255,255,255,.07);
-    padding:12px 0;justify-content:flex-start;gap:2px;
-  }
-  .nt{padding:12px 0;border-radius:10px;margin:0 8px}
+  body{padding-top:0;padding-bottom:0;flex-direction:row;height:100vh}
+  #topbar{position:static;height:100vh;width:64px;flex-direction:column;justify-content:flex-start;padding:14px 0 14px;border-bottom:none;border-right:1px solid rgba(255,255,255,.07);gap:0}
+  .tb-logo{flex-direction:column;gap:0;padding:10px 0 16px;justify-content:center;width:100%;border-bottom:1px solid rgba(255,255,255,.08)}
+  .tb-cross svg{width:30px;height:30px}
+  .tb-name{display:none}
+  .tb-add{display:none}
+  #botnav{position:static;height:100%;width:64px;flex-direction:column;border-top:none;border-right:1px solid rgba(255,255,255,.07);padding:12px 0;justify-content:flex-start;gap:2px}
+  .nt{padding:12px 0;border-radius:10px;margin:0 7px}
   .nt-lbl{display:none}
   #app{flex:1;border-left:none}
-  .sheet{
-    position:fixed;top:50%;left:50%;right:auto;bottom:auto;
-    transform:translate(-50%,-50%);
-    border-radius:18px;width:min(92vw,520px);max-height:86vh;
-    padding-bottom:0;
-  }
-  .sheet-drag{display:none}
-  .add-sheet{
-    position:fixed;top:50%;left:50%;right:auto;bottom:auto;
-    transform:translate(-50%,-50%);
-    border-radius:16px;width:min(90vw,420px);
-    padding:16px;
-  }
+  .sheet{position:fixed;top:50%;left:50%;right:auto;bottom:auto;transform:translate(-50%,-50%);border-radius:18px;width:min(94vw,520px);max-height:88vh;padding-bottom:0}
+  .sh-drag{display:none}
+  .add-sh{position:fixed;top:50%;left:50%;right:auto;bottom:auto;transform:translate(-50%,-50%);border-radius:16px;width:min(92vw,420px);padding:16px}
   .add-drag{display:none}
 }
 </style>
 </head>
 <body>
 
-<!-- ─── PASSWORD ─────────────────────────────────────────── -->
+<!-- PASSWORD -->
 <div id="pw">
   <div class="pw-box">
-    <div class="pw-logo">
-      <svg width="46" height="46" viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="#7B1230"/><circle cx="50" cy="50" r="48" fill="none" stroke="#E8D5B5" stroke-width="2.5"/><rect x="18" y="59" width="64" height="10" fill="#C8A882"/><path d="M26,59L26,68Q26,70 30,70Q34,70 34,68L34,59" fill="#5C0D23" stroke="#E8D5B5" stroke-width="0.8"/><path d="M45,59L45,68Q45,70 49,70Q53,70 53,68L53,59" fill="#5C0D23" stroke="#E8D5B5" stroke-width="0.8"/><path d="M64,59L64,68Q64,70 68,70Q72,70 72,68L72,59" fill="#5C0D23" stroke="#E8D5B5" stroke-width="0.8"/><rect x="22" y="38" width="50" height="22" fill="#D4BC94" stroke="#E8D5B5" stroke-width="1"/><polygon points="18,38 47,22 80,38" fill="#C8A882" stroke="#E8D5B5" stroke-width="1"/><rect x="45" y="16" width="3" height="9" rx="1" fill="#E8D5B5"/><rect x="41" y="19" width="11" height="3" rx="1" fill="#E8D5B5"/><circle cx="44" cy="47" r="8" fill="#5C0D23" stroke="#E8D5B5" stroke-width="1.2"/><circle cx="44" cy="47" r="5" fill="none" stroke="#E8D5B5" stroke-width="0.8"/><circle cx="44" cy="47" r="2" fill="#E8D5B5"/><line x1="44" y1="39" x2="44" y2="45" stroke="#E8D5B5" stroke-width="0.8"/><line x1="44" y1="49" x2="44" y2="55" stroke="#E8D5B5" stroke-width="0.8"/><line x1="36" y1="47" x2="42" y2="47" stroke="#E8D5B5" stroke-width="0.8"/><line x1="46" y1="47" x2="52" y2="47" stroke="#E8D5B5" stroke-width="0.8"/><path d="M38,60L38,52Q38,46 44,46Q50,46 50,52L50,60" fill="#5C0D23" stroke="#E8D5B5" stroke-width="0.8"/><rect x="25" y="42" width="7" height="11" rx="3.5" fill="#5C0D23" stroke="#E8D5B5" stroke-width="0.8"/><rect x="62" y="42" width="7" height="11" rx="3.5" fill="#5C0D23" stroke="#E8D5B5" stroke-width="0.8"/><rect x="68" y="30" width="16" height="30" fill="#D4BC94" stroke="#E8D5B5" stroke-width="1"/><polygon points="65,30 76,18 87,30" fill="#C8A882" stroke="#E8D5B5" stroke-width="1"/><rect x="74" y="12" width="3" height="8" rx="1" fill="#E8D5B5"/><rect x="70" y="15" width="11" height="3" rx="1" fill="#E8D5B5"/><circle cx="76" cy="41" r="5" fill="#5C0D23" stroke="#E8D5B5" stroke-width="1"/><line x1="76" y1="41" x2="76" y2="37" stroke="#E8D5B5" stroke-width="1" stroke-linecap="round"/><line x1="76" y1="41" x2="79" y2="42" stroke="#E8D5B5" stroke-width="1" stroke-linecap="round"/></svg>
+    <div class="pw-cross">
+      <svg width="52" height="68" viewBox="0 0 52 68" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="22" y="0" width="8" height="68" rx="4" fill="rgba(201,169,110,0.9)"/>
+        <rect x="0" y="18" width="52" height="8" rx="4" fill="rgba(201,169,110,0.9)"/>
+      </svg>
     </div>
-    <div class="pw-title">Holy Redeemer<br>Men's Ministry</div>
-    <div class="pw-sub">Members only</div>
+    <div class="pw-title">Church of the Most Holy Redeemer</div>
+    <div class="pw-name">Men's Ministry</div>
     <input class="pw-in" id="pw-in" type="password" placeholder="Enter password" onkeydown="if(event.key==='Enter')checkPw()">
     <button class="pw-btn" onclick="checkPw()">Enter</button>
     <div class="pw-err" id="pw-err"></div>
@@ -552,25 +389,30 @@ body{
 </div>
 <div id="dbl" class="gone"><div class="dbl-spin"></div><div class="dbl-txt">Loading...</div></div>
 
-<!-- ─── TOP BAR (desktop: becomes left sidebar) ──────────── -->
+<!-- TOP BAR -->
 <div id="topbar">
-  <div class="topbar-logo">
-    <svg width="30" height="30" viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="#7B1230"/><circle cx="50" cy="50" r="48" fill="none" stroke="#E8D5B5" stroke-width="2.5"/><rect x="18" y="59" width="64" height="10" fill="#C8A882"/><path d="M26,59L26,68Q26,70 30,70Q34,70 34,68L34,59" fill="#5C0D23" stroke="#E8D5B5" stroke-width="0.8"/><path d="M45,59L45,68Q45,70 49,70Q53,70 53,68L53,59" fill="#5C0D23" stroke="#E8D5B5" stroke-width="0.8"/><path d="M64,59L64,68Q64,70 68,70Q72,70 72,68L72,59" fill="#5C0D23" stroke="#E8D5B5" stroke-width="0.8"/><rect x="22" y="38" width="50" height="22" fill="#D4BC94" stroke="#E8D5B5" stroke-width="1"/><polygon points="18,38 47,22 80,38" fill="#C8A882" stroke="#E8D5B5" stroke-width="1"/><rect x="45" y="16" width="3" height="9" rx="1" fill="#E8D5B5"/><rect x="41" y="19" width="11" height="3" rx="1" fill="#E8D5B5"/><circle cx="44" cy="47" r="8" fill="#5C0D23" stroke="#E8D5B5" stroke-width="1.2"/><circle cx="44" cy="47" r="5" fill="none" stroke="#E8D5B5" stroke-width="0.8"/><circle cx="44" cy="47" r="2" fill="#E8D5B5"/><line x1="44" y1="39" x2="44" y2="45" stroke="#E8D5B5" stroke-width="0.8"/><line x1="44" y1="49" x2="44" y2="55" stroke="#E8D5B5" stroke-width="0.8"/><line x1="36" y1="47" x2="42" y2="47" stroke="#E8D5B5" stroke-width="0.8"/><line x1="46" y1="47" x2="52" y2="47" stroke="#E8D5B5" stroke-width="0.8"/><path d="M38,60L38,52Q38,46 44,46Q50,46 50,52L50,60" fill="#5C0D23" stroke="#E8D5B5" stroke-width="0.8"/><rect x="25" y="42" width="7" height="11" rx="3.5" fill="#5C0D23" stroke="#E8D5B5" stroke-width="0.8"/><rect x="62" y="42" width="7" height="11" rx="3.5" fill="#5C0D23" stroke="#E8D5B5" stroke-width="0.8"/><rect x="68" y="30" width="16" height="30" fill="#D4BC94" stroke="#E8D5B5" stroke-width="1"/><polygon points="65,30 76,18 87,30" fill="#C8A882" stroke="#E8D5B5" stroke-width="1"/><rect x="74" y="12" width="3" height="8" rx="1" fill="#E8D5B5"/><rect x="70" y="15" width="11" height="3" rx="1" fill="#E8D5B5"/><circle cx="76" cy="41" r="5" fill="#5C0D23" stroke="#E8D5B5" stroke-width="1"/><line x1="76" y1="41" x2="76" y2="37" stroke="#E8D5B5" stroke-width="1" stroke-linecap="round"/><line x1="76" y1="41" x2="79" y2="42" stroke="#E8D5B5" stroke-width="1" stroke-linecap="round"/></svg>
-    <span class="topbar-name">Holy Redeemer CMM</span>
+  <div class="tb-logo">
+    <div class="tb-cross">
+      <svg width="26" height="34" viewBox="0 0 26 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="11" y="0" width="4" height="34" rx="2" fill="rgba(201,169,110,0.85)"/>
+        <rect x="0" y="9" width="26" height="4" rx="2" fill="rgba(201,169,110,0.85)"/>
+      </svg>
+    </div>
+    <span class="tb-name">Men's Ministry</span>
   </div>
-  <button class="topbar-add" onclick="openAdd()">
+  <button class="tb-add" onclick="openAdd()">
     <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
     Add
   </button>
 </div>
 
-<!-- ─── MAIN CONTENT ──────────────────────────────────────── -->
+<!-- APP -->
 <div id="app"></div>
 
-<!-- ─── BOTTOM NAV ───────────────────────────────────────── -->
+<!-- BOTTOM NAV -->
 <nav id="botnav">
   <button class="nt on" data-m="cal" onclick="goM('cal')">
-    <div class="nt-ico"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+    <div class="nt-ico"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
     <span class="nt-lbl">Calendar</span>
   </button>
   <button class="nt" data-m="tasks" onclick="goM('tasks')">
@@ -597,48 +439,52 @@ body{
   </button>
 </nav>
 
-<!-- ─── OVERLAY ───────────────────────────────────────────── -->
+<!-- OVERLAY -->
 <div class="ov" id="ov" onclick="closeAll()"></div>
 
-<!-- ─── EVENT SHEET ───────────────────────────────────────── -->
-<div class="sheet" id="ev-sheet">
-  <div class="sheet-drag"></div>
-  <div class="sheet-hdr"><h2 id="ev-h">New Event</h2><button class="sheet-x" onclick="closeSheet('ev-sheet')">✕</button></div>
-  <div class="sheet-body"><div class="flds" id="ev-flds"></div></div>
-  <div class="sheet-ftr" id="ev-ftr"></div>
+<!-- EVENT SHEET -->
+<div class="sheet" id="ev-sh">
+  <div class="sh-drag"></div>
+  <div class="sh-hdr"><h2 id="ev-h">New Event</h2><button class="sh-x" onclick="closeSheet('ev-sh')">✕</button></div>
+  <div class="sh-body"><div class="flds" id="ev-flds"></div></div>
+  <div class="sh-ftr" id="ev-ftr"></div>
+</div>
+<!-- MEETING SHEET -->
+<div class="sheet" id="mt-sh">
+  <div class="sh-drag"></div>
+  <div class="sh-hdr"><h2 id="mt-h">New Meeting</h2><button class="sh-x" onclick="closeSheet('mt-sh')">✕</button></div>
+  <div class="sh-body"><div class="flds" id="mt-flds"></div></div>
+  <div class="sh-ftr" id="mt-ftr"></div>
+</div>
+<!-- TASK SHEET -->
+<div class="sheet" id="tk-sh">
+  <div class="sh-drag"></div>
+  <div class="sh-hdr"><h2 id="tk-h">New Task</h2><button class="sh-x" onclick="closeSheet('tk-sh')">✕</button></div>
+  <div class="sh-body"><div class="flds" id="tk-flds"></div></div>
+  <div class="sh-ftr" id="tk-ftr"></div>
+</div>
+<!-- MAN SHEET -->
+<div class="sheet" id="mn-sh">
+  <div class="sh-drag"></div>
+  <div class="sh-hdr"><h2 id="mn-h">New Man</h2><button class="sh-x" onclick="closeSheet('mn-sh')">✕</button></div>
+  <div class="sh-body"><div class="flds" id="mn-flds"></div></div>
+  <div class="sh-ftr" id="mn-ftr"></div>
 </div>
 
-<!-- ─── TASK SHEET ────────────────────────────────────────── -->
-<div class="sheet" id="tk-sheet">
-  <div class="sheet-drag"></div>
-  <div class="sheet-hdr"><h2 id="tk-h">New Task</h2><button class="sheet-x" onclick="closeSheet('tk-sheet')">✕</button></div>
-  <div class="sheet-body"><div class="flds" id="tk-flds"></div></div>
-  <div class="sheet-ftr" id="tk-ftr"></div>
-</div>
-
-<!-- ─── MAN SHEET ─────────────────────────────────────────── -->
-<div class="sheet" id="mn-sheet">
-  <div class="sheet-drag"></div>
-  <div class="sheet-hdr"><h2 id="mn-h">New Man</h2><button class="sheet-x" onclick="closeSheet('mn-sheet')">✕</button></div>
-  <div class="sheet-body"><div class="flds" id="mn-flds"></div></div>
-  <div class="sheet-ftr" id="mn-ftr"></div>
-</div>
-
-<!-- ─── ADD SHEET ─────────────────────────────────────────── -->
-<div class="ov" id="aov" onclick="closeAdd()" style="z-index:299"></div>
-<div class="add-sheet" id="add-sheet">
+<!-- ADD SHEET -->
+<div class="aov" id="aov" onclick="closeAdd()"></div>
+<div class="add-sh" id="add-sh">
   <div class="add-drag"></div>
   <div class="add-grid">
     <div class="ao" onclick="closeAdd();newEv()"><div class="ao-ico">📅</div><div class="ao-lbl">Event</div><div class="ao-sub">Add to calendar</div></div>
-    <div class="ao" onclick="closeAdd();newTk()"><div class="ao-ico">✅</div><div class="ao-lbl">Task</div><div class="ao-sub">Assign to a man</div></div>
     <div class="ao" onclick="closeAdd();newMtg()"><div class="ao-ico">🤝</div><div class="ao-lbl">Meeting</div><div class="ao-sub">Schedule one</div></div>
+    <div class="ao" onclick="closeAdd();newTk()"><div class="ao-ico">✅</div><div class="ao-lbl">Task</div><div class="ao-sub">Assign to a man</div></div>
     <div class="ao" onclick="closeAdd();newFr()"><div class="ao-ico">💰</div><div class="ao-lbl">Fundraiser</div><div class="ao-sub">Create project</div></div>
     <div class="ao" onclick="closeAdd();newMn()"><div class="ao-ico">👤</div><div class="ao-lbl">Man</div><div class="ao-sub">Add to roster</div></div>
   </div>
 </div>
 
 <script>
-// ── CONSTANTS ──────────────────────────────────────────────
 const PWD='1925';
 const M=['January','February','March','April','May','June','July','August','September','October','November','December'];
 const MS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -657,96 +503,148 @@ const TC={
 const PRI={high:{l:'High',cls:'hi'},mid:{l:'Medium',cls:'mi'},low:{l:'Low',cls:'lo'}};
 const STA={todo:{l:'To Do'},prog:{l:'In Progress'},done:{l:'Done'}};
 
-// ── SEED DATA ──────────────────────────────────────────────
+// ── DATA ────────────────────────────────────────────────────
 let events=[
-  {id:'e_jan1',title:'CMM Steering Committee Meeting',date:'2026-01-17',type:'meeting',desc:'Salesians',next:'',fT:0,fR:0,men:[],isMtg:true},
-  {id:'e_feb1',title:'Opening Mass',date:'2026-02-07',place:'OLHC',type:'mass',desc:'Opening mass for the year',next:'',fT:0,fR:0,men:[]},
-  {id:'e_feb2',title:'Holy Trinity Commissioning Mass',date:'2026-02-15',place:'Holy Trinity',type:'mass',desc:'',next:'',fT:0,fR:0,men:[]},
-  {id:'e_feb3',title:'Shrove Tuesday',date:'2026-02-17',type:'liturgical',desc:'',next:'',fT:0,fR:0,men:[]},
-  {id:'e_feb4',title:'Ash Wednesday',date:'2026-02-18',type:'liturgical',desc:'',next:'',fT:0,fR:0,men:[]},
-  {id:'e_feb5',title:'CMM Reps Meeting',date:'2026-02-19',place:'St Clare, Elsies River',type:'meeting',desc:'',next:'',fT:0,fR:0,men:[],isMtg:true},
-  {id:'e_mar1',title:'Parish Visits',date:'2026-03-01',type:'outreach',desc:'Details TBC',next:'',fT:0,fR:0,men:[]},
-  {id:'e_mar2',title:'Corpus Christi & SPX Combined Meeting',date:'2026-03-02',place:'Hall of Corpus Christi',type:'meeting',desc:'',next:'',fT:0,fR:0,men:[],isMtg:true},
-  {id:'e_mar3',title:'Grassy Park Spiritual Retreat',date:'2026-03-07',type:'retreat',desc:'Details TBA',next:'',fT:0,fR:0,men:[]},
-  {id:'e_mar4',title:'CMM Steering Committee Meeting',date:'2026-03-12',place:'St Mary of the Angels',type:'meeting',desc:'',next:'Confirm attendance, prepare agenda',fT:0,fR:0,men:['m1','m2'],isMtg:true},
-  {id:'e_mar5',title:'Installation of Archbishop Siphuku',date:'2026-03-14',place:'Grandwest Arena',type:'special',desc:'Historic installation',next:'Organise transport',fT:0,fR:0,men:['m1']},
-  {id:'e_mar6',title:'Parish Visits',date:'2026-03-15',type:'outreach',desc:'Details TBC',next:'',fT:0,fR:0,men:[]},
-  {id:'e_mar7',title:'Grassy Park Recommissioning Mass',date:'2026-03-19',type:'mass',desc:'Details TBA',next:'',fT:0,fR:0,men:[]},
-  {id:'e_mar8',title:'Stations of the Cross',date:'2026-03-21',place:'St Joseph, Kommetjie',type:'liturgical',desc:'',next:'',fT:0,fR:0,men:[]},
-  {id:'e_mar9',title:'Palm Sunday',date:'2026-03-29',type:'liturgical',desc:'',next:'',fT:0,fR:0,men:[]},
-  {id:'e_mar10',title:'Parish Visits',date:'2026-03-29',type:'outreach',desc:'Details TBC',next:'',fT:0,fR:0,men:[]},
-  {id:'e_apr1',title:'Maundy Thursday',date:'2026-04-02',type:'liturgical',desc:'',next:'',fT:0,fR:0,men:[]},
-  {id:'e_apr2',title:'Good Friday',date:'2026-04-03',type:'liturgical',desc:'',next:'',fT:0,fR:0,men:[]},
-  {id:'e_apr3',title:'Holy Saturday',date:'2026-04-04',type:'liturgical',desc:'',next:'',fT:0,fR:0,men:[]},
-  {id:'e_apr4',title:'Easter Sunday',date:'2026-04-05',type:'liturgical',desc:'',next:'',fT:0,fR:0,men:[]},
-  {id:'e_apr5',title:'Leadership Workshop',date:'2026-04-11',type:'formation',desc:'Details TBC',next:'Book venue, send invites',fT:0,fR:0,men:['m2','m3'],isMtg:true},
-  {id:'e_apr6',title:'CMM Steering Committee Meeting',date:'2026-04-16',type:'meeting',desc:'',next:'Prepare Q2 report',fT:0,fR:0,men:['m1'],isMtg:true},
-  {id:'e_apr7',title:'Parish Visits',date:'2026-04-19',type:'outreach',desc:'Details TBC',next:'',fT:0,fR:0,men:[]},
-  {id:'e_apr8',title:'Praise & Worship',date:'2026-04-25',place:'St Pius X, Plumstead',type:'worship',desc:'',next:'',fT:0,fR:0,men:[]},
-  {id:'e_may1',title:'Parish Visits',date:'2026-05-03',type:'outreach',desc:'Details TBC',next:'',fT:0,fR:0,men:[]},
-  {id:'e_may2',title:'CMM Steering Committee Meeting',date:'2026-05-07',type:'meeting',desc:'',next:'',fT:0,fR:0,men:[],isMtg:true},
-  {id:'e_may3',title:'CMM Reps Meeting',date:'2026-05-14',type:'meeting',desc:'',next:'',fT:0,fR:0,men:[],isMtg:true},
-  {id:'e_may4',title:'Camp Planning Committee Meeting',date:'2026-05-28',type:'meeting',desc:'',next:'',fT:0,fR:0,men:[],isMtg:true},
-  {id:'e_may5',title:'Parish Visits',date:'2026-05-31',type:'outreach',desc:'Details TBC',next:'',fT:0,fR:0,men:[]},
-  {id:'e_jun1',title:"Gentlemen's Club Fundraiser",date:'2026-06-06',type:'fundraiser',desc:'Annual fundraiser evening',next:'Book venue, sell tickets',fT:5000,fR:1800,men:['m1','m2','m3']},
-  {id:'e_jun2',title:'Parish Visits',date:'2026-06-14',type:'outreach',desc:'Details TBC',next:'',fT:0,fR:0,men:[]},
-  {id:'e_jun3',title:'CMM Steering Committee Meeting',date:'2026-06-18',type:'meeting',desc:'',next:'',fT:0,fR:0,men:[],isMtg:true},
-  {id:'e_jun4',title:'Praise & Worship',date:'2026-06-20',type:'worship',desc:'',next:'',fT:0,fR:0,men:[]},
-  {id:'e_jun5',title:'CMM Reps Meeting',date:'2026-06-25',type:'meeting',desc:'',next:'',fT:0,fR:0,men:[],isMtg:true},
-  {id:'e_jun6',title:'Leadership Workshop',date:'2026-06-27',type:'formation',desc:'',next:'',fT:0,fR:0,men:[]},
-  {id:'e_jul1',title:'Camp Planning Meeting',date:'2026-07-02',place:'Online',type:'meeting',desc:'',next:'',fT:0,fR:0,men:[],isMtg:true},
-  {id:'e_jul2',title:'CMM Steering Committee Meeting',date:'2026-07-16',place:'Online',type:'meeting',desc:'',next:'',fT:0,fR:0,men:[],isMtg:true},
-  {id:'e_jul3',title:'Parish Visits',date:'2026-07-19',type:'outreach',desc:'',next:'',fT:0,fR:0,men:[]},
-  {id:'e_aug1',title:'Parish Visits',date:'2026-08-02',type:'outreach',desc:'',next:'',fT:0,fR:0,men:[]},
-  {id:'e_aug2',title:'CMM Steering Committee Meeting',date:'2026-08-06',type:'meeting',desc:'',next:'',fT:0,fR:0,men:[],isMtg:true},
-  {id:'e_aug3',title:'Praise & Worship',date:'2026-08-08',type:'worship',desc:'',next:'',fT:0,fR:0,men:[]},
-  {id:'e_aug4',title:'CMM Reps Meeting',date:'2026-08-13',type:'meeting',desc:'',next:'',fT:0,fR:0,men:[],isMtg:true},
-  {id:'e_aug5',title:'Lamberts Bay 80th Anniversary',date:'2026-08-22',type:'special',desc:'',next:'Arrange transport',fT:0,fR:0,men:[]},
-  {id:'e_aug6',title:'Camp Planning Meeting',date:'2026-08-27',type:'meeting',desc:'',next:'',fT:0,fR:0,men:[],isMtg:true},
-  {id:'e_sep1',title:'Parish Visits',date:'2026-09-06',type:'outreach',desc:'',next:'',fT:0,fR:0,men:[]},
-  {id:'e_sep2',title:'CMM Steering Committee Meeting',date:'2026-09-17',place:'Online',type:'meeting',desc:'',next:'',fT:0,fR:0,men:[],isMtg:true},
-  {id:'e_sep3',title:'Camp Planning Meeting',date:'2026-09-24',place:'Online',type:'meeting',desc:'',next:'',fT:0,fR:0,men:[],isMtg:true},
-  {id:'e_oct1',title:'Potjiekos Competition',date:'2026-10-03',place:'OLHC, Lansdowne',type:'fundraiser',desc:'Community potjiekos cook-off',next:'Register teams, get sponsors',fT:8000,fR:3500,men:['m2','m4']},
-  {id:'e_oct2',title:'Camp Planning Meeting',date:'2026-10-08',place:'Online',type:'meeting',desc:'',next:'',fT:0,fR:0,men:[],isMtg:true},
-  {id:'e_oct3',title:'Parish Visits',date:'2026-10-11',type:'outreach',desc:'',next:'',fT:0,fR:0,men:[]},
-  {id:'e_oct4',title:'CMM Reps Meeting',date:'2026-10-15',type:'meeting',desc:'',next:'',fT:0,fR:0,men:[],isMtg:true},
-  {id:'e_oct5',title:'Camp Committee Spiritual Retreat',date:'2026-10-31',place:"St Joseph's, Kommetjie",type:'retreat',desc:'',next:'',fT:0,fR:0,men:[]},
-  {id:'e_nov1',title:'Camp Planning Meeting',date:'2026-11-05',type:'meeting',desc:'',next:'',fT:0,fR:0,men:[],isMtg:true},
-  {id:'e_nov2',title:'Camp Planning Meeting',date:'2026-11-12',place:'Online',type:'meeting',desc:'',next:'',fT:0,fR:0,men:[],isMtg:true},
-  {id:'e_nov3',title:'Camp Goodie Bag Packing',date:'2026-11-21',type:'meeting',desc:'Details TBC',next:'',fT:0,fR:0,men:[]},
-  {id:'e_nov4',title:"Annual Men's Spiritual Retreat",date:'2026-11-27',place:'Bergkroon',type:'retreat',desc:'3-day annual retreat',next:'Confirm numbers, book accommodation',fT:0,fR:0,men:['m1','m2','m3','m4']},
-  {id:'e_nov5',title:"Retreat Day 2",date:'2026-11-28',place:'Bergkroon',type:'retreat',desc:'',next:'',fT:0,fR:0,men:[]},
-  {id:'e_nov6',title:"Retreat Day 3",date:'2026-11-29',place:'Bergkroon',type:'retreat',desc:'',next:'',fT:0,fR:0,men:[]},
-  {id:'e_dec1',title:'Christmas',date:'2026-12-25',type:'liturgical',desc:'',next:'',fT:0,fR:0,men:[]},
-];
+  // JANUARY
+  {id:'e_j01',title:'CMM Steering Committee Meeting',date:'2026-01-17',type:'meeting',place:'Salesians',desc:'',next:'',fT:0,fR:0,men:[]},
+  // FEBRUARY
+  {id:'e_f01',title:'Opening Mass',date:'2026-02-07',type:'mass',place:'OLHC',desc:'',next:'',fT:0,fR:0,men:[]},
+  {id:'e_f02',title:'Holy Trinity Commissioning Mass',date:'2026-02-15',type:'mass',place:'Holy Trinity',desc:'',next:'',fT:0,fR:0,men:[]},
+  {id:'e_f03',title:'Shrove Tuesday',date:'2026-02-17',type:'liturgical',place:'',desc:'',next:'',fT:0,fR:0,men:[]},
+  {id:'e_f04',title:'Ash Wednesday',date:'2026-02-18',type:'liturgical',place:'',desc:'',next:'',fT:0,fR:0,men:[]},
+  {id:'e_f05',title:'CMM Reps Meeting',date:'2026-02-19',type:'meeting',place:'St Clare, Elsies River',desc:'',next:'',fT:0,fR:0,men:[]},
+  // MARCH
+  {id:'e_m01',title:'Parish Visits',date:'2026-03-01',type:'outreach',place:'',desc:'Details TBC',next:'',fT:0,fR:0,men:[]},
+  {id:'e_m02',title:'Corpus Christi & SPX Combined Meeting',date:'2026-03-02',type:'meeting',place:'Hall of Corpus Christi',desc:'',next:'',fT:0,fR:0,men:[]},
+  {id:'e_m03',title:'Grassy Park Spiritual Retreat',date:'2026-03-07',type:'retreat',place:'Grassy Park',desc:'Details TBA',next:'',fT:0,fR:0,men:[]},
+  {id:'e_m04',title:'CMM Steering Committee Meeting',date:'2026-03-12',type:'meeting',place:'St Mary of the Angels',desc:'',next:'Confirm attendance, prepare agenda',fT:0,fR:0,men:['m1','m2']},
+  {id:'e_m05',title:'Installation of Archbishop Siphuku',date:'2026-03-14',type:'special',place:'Grandwest Arena',desc:'',next:'Organise transport for members',fT:0,fR:0,men:[]},
+  {id:'e_m06',title:'Parish Visits',date:'2026-03-15',type:'outreach',place:'',desc:'Details TBC',next:'',fT:0,fR:0,men:[]},
+  {id:'e_m07',title:'Grassy Park Recommissioning Mass',date:'2026-03-19',type:'mass',place:'Grassy Park',desc:'Details TBA',next:'',fT:0,fR:0,men:[]},
+  {id:'e_m08',title:'Stations of the Cross',date:'2026-03-21',type:'liturgical',place:'St Joseph, Kommetjie',desc:'',next:'',fT:0,fR:0,men:[]},
+  {id:'e_m09',title:'Palm Sunday',date:'2026-03-29',type:'liturgical',place:'',desc:'',next:'',fT:0,fR:0,men:[]},
+  {id:'e_m10',title:'Parish Visits',date:'2026-03-29',type:'outreach',place:'',desc:'Details TBC',next:'',fT:0,fR:0,men:[]},
+  // APRIL
+  {id:'e_a01',title:'Maundy Thursday',date:'2026-04-02',type:'liturgical',place:'',desc:'',next:'',fT:0,fR:0,men:[]},
+  {id:'e_a02',title:'Good Friday',date:'2026-04-03',type:'liturgical',place:'',desc:'',next:'',fT:0,fR:0,men:[]},
+  {id:'e_a03',title:'Holy Saturday',date:'2026-04-04',type:'liturgical',place:'',desc:'',next:'',fT:0,fR:0,men:[]},
+  {id:'e_a04',title:'Easter Sunday',date:'2026-04-05',type:'liturgical',place:'',desc:'',next:'',fT:0,fR:0,men:[]},
+  {id:'e_a05',title:'Leadership Workshop',date:'2026-04-11',type:'formation',place:'Parish Centre',desc:'Details TBC',next:'Book venue, send invites',fT:0,fR:0,men:[]},
+  {id:'e_a06',title:'CMM Steering Committee Meeting',date:'2026-04-16',type:'meeting',place:'Venue TBC',desc:'',next:'',fT:0,fR:0,men:[]},
+  {id:'e_a07',title:'Parish Visits',date:'2026-04-19',type:'outreach',place:'',desc:'Details TBC',next:'',fT:0,fR:0,men:[]},
+  {id:'e_a08',title:'Praise & Worship',date:'2026-04-25',type:'worship',place:'St Pius X, Plumstead',desc:'',next:'',fT:0,fR:0,men:[]},
+  // MAY
+  {id:'e_may1',title:'Parish Visits',date:'2026-05-03',type:'outreach',place:'',desc:'Details TBC',next:'',fT:0,fR:0,men:[]},
+  {id:'e_may2',title:'CMM Steering Committee Meeting',date:'2026-05-07',type:'meeting',place:'Venue TBC',desc:'',next:'',fT:0,fR:0,men:[]},
+  {id:'e_may3',title:'CMM Reps Meeting',date:'2026-05-14',type:'meeting',place:'Venue TBC',desc:'',next:'',fT:0,fR:0,men:[]},
+  {id:'e_may4',title:'Camp Planning Committee Meeting',date:'2026-05-28',type:'meeting',place:'Details TBC',desc:'',next:'',fT:0,fR:0,men:[]},
+  {id:'e_may5',title:'Parish Visits',date:'2026-05-31',type:'outreach',place:'',desc:'Details TBC',next:'',fT:0,fR:0,men:[]},
+  // JUNE
+  {id:'e_jun1',title:"Gentlemen's Club Fundraiser",date:'2026-06-06',type:'fundraiser',place:'Venue TBC',desc:'Annual fundraiser evening',next:'Confirm venue, ticket pricing, catering',fT:5000,fR:0,men:[]},
+  {id:'e_jun2',title:'Parish Visits',date:'2026-06-14',type:'outreach',place:'',desc:'Details TBC',next:'',fT:0,fR:0,men:[]},
+  {id:'e_jun3',title:'CMM Steering Committee Meeting',date:'2026-06-18',type:'meeting',place:'Venue TBC',desc:'',next:'',fT:0,fR:0,men:[]},
+  {id:'e_jun4',title:'Praise & Worship',date:'2026-06-20',type:'worship',place:'Venue TBC',desc:'',next:'',fT:0,fR:0,men:[]},
+  {id:'e_jun5',title:'CMM Reps Meeting',date:'2026-06-25',type:'meeting',place:'Venue TBC',desc:'',next:'',fT:0,fR:0,men:[]},
+  {id:'e_jun6',title:'Leadership Workshop',date:'2026-06-27',type:'formation',place:'Venue TBC',desc:'',next:'',fT:0,fR:0,men:[]},
+  // JULY
+  {id:'e_jul1',title:'Camp Planning Committee Meeting',date:'2026-07-02',type:'meeting',place:'Online',desc:'',next:'',fT:0,fR:0,men:[]},
+  {id:'e_jul2',title:'CMM Steering Committee Meeting',date:'2026-07-16',type:'meeting',place:'Online',desc:'',next:'',fT:0,fR:0,men:[]},
+  {id:'e_jul3',title:'Parish Visits',date:'2026-07-19',type:'outreach',place:'',desc:'Details TBC',next:'',fT:0,fR:0,men:[]},
+  // AUGUST
+  {id:'e_aug1',title:'Parish Visits',date:'2026-08-02',type:'outreach',place:'',desc:'Details TBC',next:'',fT:0,fR:0,men:[]},
+  {id:'e_aug2',title:'CMM Steering Committee Meeting',date:'2026-08-06',type:'meeting',place:'Details TBC',desc:'',next:'',fT:0,fR:0,men:[]},
+  {id:'e_aug3',title:'Praise & Worship',date:'2026-08-08',type:'worship',place:'Details TBC',desc:'',next:'',fT:0,fR:0,men:[]},
+  {id:'e_aug4',title:'CMM Reps Meeting',date:'2026-08-13',type:'meeting',place:'Details TBC',desc:'',next:'',fT:0,fR:0,men:[]},
+  {id:'e_aug5',title:'Lamberts Bay 80th Anniversary',date:'2026-08-22',type:'special',place:'Lamberts Bay',desc:'',next:'Arrange transport',fT:0,fR:0,men:[]},
+  {id:'e_aug6',title:'Lamberts Bay 80th Anniversary Day 2',date:'2026-08-23',type:'special',place:'Lamberts Bay',desc:'',next:'',fT:0,fR:0,men:[]},
+  {id:'e_aug7',title:'Camp Planning Committee Meeting',date:'2026-08-27',type:'meeting',place:'Details TBC',desc:'',next:'',fT:0,fR:0,men:[]},
+  // SEPTEMBER
+  {id:'e_sep1',title:'Parish Visits',date:'2026-09-06',type:'outreach',place:'',desc:'Details TBC',next:'',fT:0,fR:0,men:[]},
+  {id:'e_sep2',title:'CMM Steering Committee Meeting',date:'2026-09-17',type:'meeting',place:'Online',desc:'',next:'',fT:0,fR:0,men:[]},
+  {id:'e_sep3',title:'Camp Planning Committee Meeting',date:'2026-09-24',type:'meeting',place:'Online',desc:'',next:'',fT:0,fR:0,men:[]},
+  // OCTOBER
+  {id:'e_oct1',title:'Potjiekos Competition',date:'2026-10-03',type:'fundraiser',place:'OLHC, Lansdowne',desc:'Annual potjiekos cook-off',next:'Register teams, source sponsors',fT:8000,fR:0,men:[]},
+  {id:'e_oct2',title:'Camp Planning Committee Meeting',date:'2026-10-08',type:'meeting',place:'Online',desc:'',next:'',fT:0,fR:0,men:[]},
+  {id:'e_oct3',title:'Parish Visits',date:'2026-10-11',type:'outreach',place:'',desc:'Details TBC',next:'',fT:0,fR:0,men:[]},
+  {id:'e_oct4',title:'CMM Reps Meeting',date:'2026-10-15',type:'meeting',place:'Details TBC',desc:'',next:'',fT:0,fR:0,men:[]},
+  {id:'e_oct5',title:'Camp Planning Committee Meeting',date:'2026-10-22',type:'meeting',place:'Details TBC',desc:'',next:'',fT:0,fR:0,men:[]},
+  {id:'e_oct6',title:'Camp Committee Spiritual Retreat',date:'2026-10-31',type:'retreat',place:"St Joseph's, Kommetjie",desc:'',next:'',fT:0,fR:0,men:[]},
+  // NOVEMBER
+  {id:'e_nov1',title:'Camp Planning Committee Meeting',date:'2026-11-05',type:'meeting',place:'Details TBC',desc:'',next:'',fT:0,fR:0,men:[]},
+  {id:'e_nov2',title:'Camp Planning Committee Meeting',date:'2026-11-12',type:'meeting',place:'Online',desc:'',next:'',fT:0,fR:0,men:[]},
+  {id:'e_nov3',title:'Camp Committee Goodie Bag Packing',date:'2026-11-21',type:'outreach',place:'Details TBC',desc:'',next:'',fT:0,fR:0,men:[]},
+  {id:'e_nov4',title:"Annual Men's Spiritual Retreat",date:'2026-11-27',type:'retreat',place:'Bergkroon',desc:'3-day annual retreat',next:'Confirm numbers, book accommodation',fT:0,fR:0,men:[]},
+  {id:'e_nov5',title:"Annual Men's Spiritual Retreat Day 2",date:'2026-11-28',type:'retreat',place:'Bergkroon',desc:'',next:'',fT:0,fR:0,men:[]},
+  {id:'e_nov6',title:"Annual Men's Spiritual Retreat Day 3",date:'2026-11-29',type:'retreat',place:'Bergkroon',desc:'',next:'',fT:0,fR:0,men:[]},
+  // DECEMBER
+  {id:'e_dec1',title:'Christmas',date:'2026-12-25',type:'liturgical',place:'',desc:'',next:'',fT:0,fR:0,men:[]},
+]
+let meetings=[
+  {id:'mt01',title:'CMM Steering Committee Meeting',date:'2026-01-17',place:'Salesians',time:'',attendees:[],agenda:'',minutes:'',next:''},
+  {id:'mt02',title:'CMM Reps Meeting',date:'2026-02-19',place:'St Clare, Elsies River',time:'',attendees:[],agenda:'',minutes:'',next:''},
+  {id:'mt03',title:'Corpus Christi & SPX Combined Meeting',date:'2026-03-02',place:'Hall of Corpus Christi',time:'',attendees:[],agenda:'',minutes:'',next:''},
+  {id:'mt04',title:'CMM Steering Committee Meeting',date:'2026-03-12',place:'St Mary of the Angels',time:'09:30',attendees:['m1','m2'],agenda:'1. Opening prayer\n2. Q1 review\n3. Upcoming events\n4. AOB',minutes:'',next:'Confirm attendance, prepare agenda'},
+  {id:'mt05',title:'Leadership Workshop',date:'2026-04-11',place:'Parish Centre',time:'',attendees:[],agenda:'Leadership development topics TBC',minutes:'',next:'Book venue, send invites'},
+  {id:'mt06',title:'CMM Steering Committee Meeting',date:'2026-04-16',place:'Venue TBC',time:'',attendees:[],agenda:'',minutes:'',next:''},
+  {id:'mt07',title:'CMM Steering Committee Meeting',date:'2026-05-07',place:'Venue TBC',time:'',attendees:[],agenda:'',minutes:'',next:''},
+  {id:'mt08',title:'CMM Reps Meeting',date:'2026-05-14',place:'Venue TBC',time:'',attendees:[],agenda:'',minutes:'',next:''},
+  {id:'mt09',title:'Camp Planning Committee Meeting',date:'2026-05-28',place:'Details TBC',time:'',attendees:[],agenda:'',minutes:'',next:''},
+  {id:'mt10',title:'CMM Steering Committee Meeting',date:'2026-06-18',place:'Venue TBC',time:'',attendees:[],agenda:'',minutes:'',next:''},
+  {id:'mt11',title:'CMM Reps Meeting',date:'2026-06-25',place:'Venue TBC',time:'',attendees:[],agenda:'',minutes:'',next:''},
+  {id:'mt12',title:'Camp Planning Committee Meeting',date:'2026-07-02',place:'Online',time:'',attendees:[],agenda:'',minutes:'',next:''},
+  {id:'mt13',title:'CMM Steering Committee Meeting',date:'2026-07-16',place:'Online',time:'',attendees:[],agenda:'',minutes:'',next:''},
+  {id:'mt14',title:'CMM Steering Committee Meeting',date:'2026-08-06',place:'Details TBC',time:'',attendees:[],agenda:'',minutes:'',next:''},
+  {id:'mt15',title:'CMM Reps Meeting',date:'2026-08-13',place:'Details TBC',time:'',attendees:[],agenda:'',minutes:'',next:''},
+  {id:'mt16',title:'Camp Planning Committee Meeting',date:'2026-08-27',place:'Details TBC',time:'',attendees:[],agenda:'',minutes:'',next:''},
+  {id:'mt17',title:'CMM Steering Committee Meeting',date:'2026-09-17',place:'Online',time:'',attendees:[],agenda:'',minutes:'',next:''},
+  {id:'mt18',title:'Camp Planning Committee Meeting',date:'2026-09-24',place:'Online',time:'',attendees:[],agenda:'',minutes:'',next:''},
+  {id:'mt19',title:'Camp Planning Committee Meeting',date:'2026-10-08',place:'Online',time:'',attendees:[],agenda:'',minutes:'',next:''},
+  {id:'mt20',title:'CMM Reps Meeting',date:'2026-10-15',place:'Details TBC',time:'',attendees:[],agenda:'',minutes:'',next:''},
+  {id:'mt21',title:'Camp Planning Committee Meeting',date:'2026-10-22',place:'Details TBC',time:'',attendees:[],agenda:'',minutes:'',next:''},
+  {id:'mt22',title:'Camp Planning Committee Meeting',date:'2026-11-05',place:'Details TBC',time:'',attendees:[],agenda:'',minutes:'',next:''},
+  {id:'mt23',title:'Camp Planning Committee Meeting',date:'2026-11-12',place:'Online',time:'',attendees:[],agenda:'',minutes:'',next:''},
+]
 let tasks=[
-  {id:'t1',title:'Book Grandwest Arena transport',due:'2026-03-10',men:['m1','m2'],sta:'todo',pri:'high',notes:'Need a 15-seater. Check with Trevor.',evId:'e_mar5'},
-  {id:'t2',title:'Send invites for Leadership Workshop',due:'2026-04-01',men:['m3'],sta:'prog',pri:'mid',notes:'Email + WhatsApp blast',evId:'e_apr5'},
-  {id:'t3',title:"Design Gentlemen's Club fundraiser poster",due:'2026-04-15',men:['m2','m5'],sta:'prog',pri:'high',notes:'Burgundy and gold theme. A5 format.',evId:'e_jun1'},
-  {id:'t4',title:'Register potjiekos teams',due:'2026-08-01',men:['m4'],sta:'todo',pri:'low',notes:'Max 8 teams. R200 entry per team.',evId:'e_oct1'},
-  {id:'t5',title:'Book Bergkroon retreat accommodation',due:'2026-09-01',men:['m1','m3'],sta:'todo',pri:'high',notes:'Need 20 beds minimum.',evId:'e_nov4'},
-  {id:'t6',title:'Source Potjiekos sponsors',due:'2026-07-01',men:['m2','m4'],sta:'todo',pri:'mid',notes:'Target local businesses in Lansdowne.',evId:'e_oct1'},
-  {id:'t7',title:'Update membership register',due:'2026-03-20',men:['m1'],sta:'done',pri:'low',notes:'',evId:null},
-  {id:'t8',title:'Confirm Q2 Steering venue',due:'2026-04-01',men:['m1'],sta:'todo',pri:'mid',notes:'',evId:'e_apr6'},
-  {id:'t9',title:'Prepare Q1 report',due:'2026-03-11',men:['m1'],sta:'done',pri:'high',notes:'Submitted.',evId:'e_mar4'},
-];
+  {id:'t1',title:'Book transport for Archbishop Installation',due:'2026-03-10',men:['m1'],sta:'todo',pri:'high',notes:'Need a 15-seater bus. Contact Trevor for transport contacts.',evId:'e_m05'},
+  {id:'t2',title:'Confirm Bergkroon retreat numbers',due:'2026-10-01',men:['m1'],sta:'todo',pri:'high',notes:'Need confirmed headcount for accommodation booking.',evId:'e_nov4'},
+  {id:'t3',title:"Organise Gentlemen's Club Fundraiser",due:'2026-04-01',men:['m1','m3'],sta:'todo',pri:'high',notes:'Book venue, set ticket price, arrange catering.',evId:'e_jun1'},
+  {id:'t4',title:'Source Potjiekos sponsors',due:'2026-08-01',men:['m3'],sta:'todo',pri:'mid',notes:'Target local businesses in Lansdowne area.',evId:'e_oct1'},
+  {id:'t5',title:'Update membership register',due:'2026-04-30',men:['m1'],sta:'done',pri:'low',notes:'Ensure all new members are captured.',evId:null},
+  {id:'t6',title:'Book venue for Q2 Steering meeting',due:'2026-04-10',men:['m1'],sta:'todo',pri:'mid',notes:'',evId:'e_a06'},
+]
 let men=[
-  {id:'m1',name:'Derrick Haydricks',dob:'1960-06-25',trade:'Retired Engineer'},
-  {id:'m2',name:'Trevor Cross',dob:'1953-09-13',trade:'Accountant'},
-  {id:'m3',name:'Collin Watson',dob:'1962-12-01',trade:'IT Consultant'},
-  {id:'m4',name:'Michael Jacobs',dob:'1965-04-03',trade:'Educator'},
-  {id:'m5',name:'Alan Steed',dob:'1990-09-22',trade:'Entrepreneur'},
-  {id:'m6',name:'Grant Ross',dob:'1975-07-15',trade:'Project Manager'},
-  {id:'m7',name:"James O'Brien",dob:'1980-06-10',trade:'Plumber'},
-];
+  {id:'m1',name:'Derrick Haydricks',dob:'1960-06-25',trade:''},
+  {id:'m2',name:'Shane Davids',dob:'1972-01-02',trade:''},
+  {id:'m3',name:'Trevor Cross',dob:'1953-09-13',trade:''},
+  {id:'m4',name:'Geoff Levingston',dob:'1942-10-10',trade:''},
+  {id:'m5',name:'Bruley Palm',dob:'1969-10-26',trade:''},
+  {id:'m6',name:'Terrance Snak',dob:'2018-06-06',trade:''},
+  {id:'m7',name:'Collin Watson',dob:'1962-12-01',trade:''},
+  {id:'m8',name:'Bowles Loss',dob:'1967-11-21',trade:''},
+  {id:'m9',name:'Jeremy Allevard',dob:'',trade:''},
+  {id:'m10',name:'Michael Jacobs',dob:'1965-04-03',trade:''},
+  {id:'m11',name:'Adrian Hartman',dob:'1958-10-08',trade:''},
+  {id:'m12',name:'Trevon Carvel',dob:'1965-03-23',trade:''},
+  {id:'m13',name:'Aslyne Storoe',dob:'1941-12-05',trade:''},
+  {id:'m14',name:'Eric Maniragaba',dob:'1982-08-15',trade:''},
+  {id:'m15',name:'Clement Newton',dob:'1983-11-01',trade:''},
+  {id:'m16',name:'Jonathan Hendricks',dob:'1929-12-06',trade:''},
+  {id:'m17',name:'Jean-Pierre Nigis',dob:'1929-12-06',trade:''},
+  {id:'m18',name:'Alan Steed',dob:'1990-09-22',trade:''},
+  {id:'m19',name:'Patrick Kategan',dob:'1946-11-15',trade:''},
+  {id:'m20',name:'Ayrent Hendricks',dob:'1949-06-05',trade:''},
+  {id:'m21',name:'Lucinda Bartey',dob:'2002-05-01',trade:''},
+  {id:'m22',name:'Grant Ross',dob:'1975-07-15',trade:''},
+  {id:'m23',name:"James O'Brien",dob:'1980-06-10',trade:''},
+  {id:'m24',name:'Serenity',dob:'1932-02-09',trade:''},
+]
 
-// ── STATE ──────────────────────────────────────────────────
-let mod='cal',calV='agenda',calD=new Date(2026,2,31);
-let editEv=null,editTk=null,editMn=null;
-let menV='list',menQ='',tkF='all';
-let nid=700;
+let mod='cal',calV='agenda',calD=new Date();  // opens on TODAY
+let editEv=null,editMt=null,editTk=null,editMn=null;
+let menV='list',menQ='',menSort='name',tkF='all';
+let nid=800;
 
-// ── HELPERS ────────────────────────────────────────────────
+// ── HELPERS ──────────────────────────────────────────────────
 const uid=()=>'x'+(nid++);
 const age=dob=>{if(!dob)return null;const[y,m,d]=dob.split('-').map(Number),t=new Date();let a=t.getFullYear()-y;if(t.getMonth()<m-1||(t.getMonth()===m-1&&t.getDate()<d))a--;return a};
 const ini=n=>n.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
@@ -762,7 +660,7 @@ const isOD=due=>{if(!due)return false;return new Date(due+'T00:00:00')<new Date(
 const tasksFor=mid=>tasks.filter(t=>t.men&&t.men.includes(mid));
 function avH(id,sz=20){const mb=byId(id);if(!mb)return'';return`<div class="av" style="width:${sz}px;height:${sz}px;font-size:${Math.round(sz*.38)}px">${ini(mb.name)}</div>`}
 
-// ── RENDER ─────────────────────────────────────────────────
+// ── RENDER ───────────────────────────────────────────────────
 function render(){
   const app=document.getElementById('app');
   if(mod==='cal')app.innerHTML=calHTML();
@@ -772,16 +670,15 @@ function render(){
   else app.innerHTML=menHTML();
   badges();
 }
-
 function badges(){
   const open=tasks.filter(t=>t.sta!=='done').length;
-  const mtgs=events.filter(e=>e.isMtg).length;
+  const mtgCnt=meetings.length;
   const tb=document.getElementById('tbdg'),mb=document.getElementById('mbdg');
   if(tb){tb.textContent=open;tb.style.display=open?'flex':'none'}
-  if(mb){mb.textContent=mtgs;mb.style.display=mtgs?'flex':'none'}
+  if(mb){mb.textContent=mtgCnt;mb.style.display=mtgCnt?'flex':'none'}
 }
 
-// ── CALENDAR ───────────────────────────────────────────────
+// ── CALENDAR ─────────────────────────────────────────────────
 function calHTML(){
   const y=calD.getFullYear(),mi=calD.getMonth();
   const lbl=calV==='week'?wkLbl():`${M[mi]} ${y}`;
@@ -789,19 +686,22 @@ function calHTML(){
   const body=calV==='agenda'?agHTML():calV==='month'?moHTML():wkHTML();
   return`<div class="pg">
     <div class="cal-nav">
-      <button class="cal-arrow" onclick="calN(-1)">&#8249;</button>
-      <span class="cal-title">${lbl}</span>
-      <button class="today-btn" onclick="goT()">Today</button>
-      <button class="cal-arrow" onclick="calN(1)">&#8250;</button>
+      <button class="c-arrow" onclick="calN(-1)">&#8249;</button>
+      <span class="c-title">${lbl}</span>
+      <button class="c-today" onclick="goT()">Today</button>
+      <button class="c-arrow" onclick="calN(1)">&#8250;</button>
     </div>
-    <div class="pill-strip">${pills}</div>
+    <div class="pills">${pills}</div>
     <div class="scrl pad">${body}</div>
   </div>`;
 }
 function wkLbl(){const s=new Date(calD);s.setDate(s.getDate()-s.getDay());const e=new Date(s);e.setDate(e.getDate()+6);return`${s.getDate()} ${MS[s.getMonth()]} – ${e.getDate()} ${MS[e.getMonth()]}`}
+
 function agHTML(){
   const today=new Date(),end=new Date(calD.getFullYear(),calD.getMonth()+3,0);
-  let bm={};let d=new Date(calD.getFullYear(),calD.getMonth(),1);
+  // start from today's month if current month
+  const startD=new Date(calD.getFullYear(),calD.getMonth(),1);
+  let bm={};let d=new Date(startD);
   while(d<=end){
     const ds=dstr(d.getFullYear(),d.getMonth(),d.getDate()),evs=evOn(ds);
     if(evs.length){const k=d.getFullYear()+'-'+d.getMonth();if(!bm[k])bm[k]={lbl:M[d.getMonth()]+' '+d.getFullYear(),days:[]};bm[k].days.push({d:new Date(d),ds,evs})}
@@ -816,16 +716,31 @@ function agHTML(){
     }).join('')}</div></div>`;
   }).join('')}</div>`).join('');
 }
+
 function moHTML(){
-  const y=calD.getFullYear(),mi=calD.getMonth(),first=new Date(y,mi,1).getDay(),dim=new Date(y,mi+1,0).getDate(),today=new Date();
-  let h='<div class="month-grid">'+D.map(d=>`<div class="mh">${d[0]}</div>`).join('');
-  for(let i=0;i<first;i++)h+='<div class="mc om"></div>';
+  const y=calD.getFullYear(),mi=calD.getMonth();
+  const first=new Date(y,mi,1).getDay();
+  const dim=new Date(y,mi+1,0).getDate();
+  const today=new Date();
+  // day headers
+  let h=`<div class="month-wrap"><div class="month-grid">`;
+  D.forEach(d=>h+=`<div class="mh">${d[0]}</div>`);
+  // empty cells before first day
+  for(let i=0;i<first;i++)h+=`<div class="mc om"></div>`;
+  // day cells
   for(let d=1;d<=dim;d++){
-    const ds=dstr(y,mi,d),evs=evOn(ds),isT=today.getFullYear()===y&&today.getMonth()===mi&&today.getDate()===d;
-    h+=`<div class="mc${isT?' tod':''}" onclick="dayClk('${ds}')"><div class="mdn">${d}</div>${evs.slice(0,2).map(e=>{const t=tc(e.type);return`<div class="mec" style="background:${t.bg};color:${t.c}">${e.title}</div>`}).join('')}${evs.length>2?`<div class="mmore">+${evs.length-2}</div>`:''}</div>`;
+    const ds=dstr(y,mi,d),evs=evOn(ds);
+    const isT=today.getFullYear()===y&&today.getMonth()===mi&&today.getDate()===d;
+    h+=`<div class="mc${isT?' tod':''}" onclick="dayClk('${ds}')">`;
+    h+=`<div class="mdn">${d}</div>`;
+    evs.slice(0,2).forEach(e=>{const t=tc(e.type);h+=`<div class="mec" style="background:${t.bg};color:${t.c}">${e.title}</div>`});
+    if(evs.length>2)h+=`<div class="mmore">+${evs.length-2}</div>`;
+    h+=`</div>`;
   }
-  return h+'</div>';
+  h+=`</div></div>`;
+  return h;
 }
+
 function wkHTML(){
   const s=new Date(calD);s.setDate(s.getDate()-s.getDay());const today=new Date();
   let h='<div class="wk-grid">';
@@ -837,7 +752,7 @@ function wkHTML(){
   return h+'</div>';
 }
 
-// ── TASKS ──────────────────────────────────────────────────
+// ── TASKS ─────────────────────────────────────────────────────
 function tkHTML(){
   const pills=['all','todo','prog','done','high'].map(f=>{const ls={all:'All',todo:'To Do',prog:'In Progress',done:'Done',high:'High'};return`<button class="pi${tkF===f?' on':''}" onclick="setTF('${f}')">${ls[f]}</button>`}).join('');
   let fil=tasks;
@@ -850,33 +765,39 @@ function tkHTML(){
     const p=PRI[t.pri]||PRI.mid,ev=t.evId?evById(t.evId):null,od=isOD(t.due)&&t.sta!=='done';
     return`<div class="tk-card" onclick="openTk('${t.id}')"><div class="tk-avs">${(t.men||[]).slice(0,3).map(id=>avH(id,19)).join('')}</div><div class="tk-ttl">${t.title}</div><div class="tk-meta"><span class="tk-pri ${p.cls}">${p.l}</span>${t.due?`<span class="tk-due${od?' od':''}">📅 ${fmtD(t.due)}${od?' · Overdue':''}</span>`:''}</div>${ev?`<div class="tk-ev">🔗 ${ev.title}</div>`:''} ${t.notes?`<div class="tk-notes">${t.notes}</div>`:''}</div>`;
   };
-  const col=(items,sta,cls)=>`<div class="kb-col ${cls}"><div class="kb-hd"><span class="kb-htitle">${STA[sta].l}</span><span class="kb-hcnt">${items.length}</span></div><div class="kb-cards"><button class="kb-add" onclick="newTkSta('${sta}')">＋ Add task</button>${items.length?items.map(card).join(''):'<div style="text-align:center;padding:14px;font-size:11px;color:var(--t3)">Nothing here</div>'}</div></div>`;
-  return`<div class="kb-wrap">
-    <div class="pill-strip">${pills}</div>
-    <div class="kb-body">${col(todo,'todo','kb-todo')}${col(prog,'prog','kb-prog')}${col(done,'done','kb-done')}</div>
-  </div>`;
+  const col=(items,sta,cls)=>`<div class="kb-col ${cls}"><div class="kb-hd"><span class="kb-ht">${STA[sta].l}</span><span class="kb-hc">${items.length}</span></div><div class="kb-cards"><button class="kb-add" onclick="newTkSta('${sta}')">＋ Add task</button>${items.length?items.map(card).join(''):'<div style="text-align:center;padding:12px;font-size:11px;color:var(--t3)">Nothing here</div>'}</div></div>`;
+  return`<div class="kb-wrap"><div class="pills">${pills}</div><div class="kb-body">${col(todo,'todo','kb-todo')}${col(prog,'prog','kb-prog')}${col(done,'done','kb-done')}</div></div>`;
 }
 
-// ── MEETINGS ───────────────────────────────────────────────
+// ── MEETINGS ─────────────────────────────────────────────────
 function mtgHTML(){
   const now=new Date().toISOString().slice(0,10);
-  const up=events.filter(e=>e.isMtg&&e.date>=now).sort((a,b)=>a.date.localeCompare(b.date));
-  const pa=events.filter(e=>e.isMtg&&e.date<now).sort((a,b)=>b.date.localeCompare(a.date));
-  const card=e=>{
-    const[y,m,d]=e.date.split('-'),t=tc(e.type),dd=new Date(parseInt(y),parseInt(m)-1,parseInt(d));
-    return`<div class="mtg-card" onclick="openEv('${e.id}')"><div class="mtg-db"><div class="mtg-dd">${D[dd.getDay()].slice(0,3)}</div><div class="mtg-dn">${parseInt(d)}</div><div class="mtg-dm">${MS[parseInt(m)-1]}</div></div><div class="mtg-body"><div class="mtg-ttl">${e.title}</div><div class="mtg-meta"><span class="ag-tag" style="background:${t.bg};color:${t.c}">${t.l}</span>${e.place?`<span class="mtg-plc">📍 ${e.place}</span>`:''}</div>${e.next?`<div class="mtg-nxt"><div class="mtg-nlbl">Next steps</div>${e.next}</div>`:''} ${e.men&&e.men.length?`<div class="mtg-avs">${e.men.map(id=>avH(id,24)).join('')}</div>`:''}</div></div>`;
+  const up=meetings.filter(m=>m.date>=now).sort((a,b)=>a.date.localeCompare(b.date));
+  const pa=meetings.filter(m=>m.date<now).sort((a,b)=>b.date.localeCompare(a.date));
+  const card=m=>{
+    const[y,mo,d]=m.date.split('-'),dd=new Date(parseInt(y),parseInt(mo)-1,parseInt(d));
+    return`<div class="mtg-card" onclick="openMtg('${m.id}')">
+      <div class="mtg-db"><div class="mtg-dd">${D[dd.getDay()].slice(0,3)}</div><div class="mtg-dn">${parseInt(d)}</div><div class="mtg-dm">${MS[parseInt(mo)-1]}</div></div>
+      <div class="mtg-body">
+        <div class="mtg-ttl">${m.title}</div>
+        <div class="mtg-meta">${m.place?`<span class="mtg-plc">📍 ${m.place}</span>`:''} ${m.time?`<span class="mtg-plc">🕐 ${m.time}</span>`:''}</div>
+        ${m.agenda?`<div class="mtg-box"><div class="mtg-box-lbl">Agenda</div>${m.agenda}</div>`:''}
+        ${m.next?`<div class="mtg-box" style="border-left-color:var(--green);margin-top:4px"><div class="mtg-box-lbl" style="color:var(--green)">Next steps</div>${m.next}</div>`:''}
+        ${m.attendees&&m.attendees.length?`<div class="mtg-avs">${m.attendees.map(id=>avH(id,24)).join('')}</div>`:''}
+      </div>
+    </div>`;
   };
   return`<div class="pg">
     <div class="pg-hdr"><span class="pg-title">Meetings</span></div>
     <div class="scrl pad">
       ${up.length?`<div class="slbl">Upcoming</div>${up.map(card).join('')}`:''}
       ${pa.length?`<div class="slbl" style="margin-top:14px;opacity:.55">Past</div><div style="opacity:.5">${pa.map(card).join('')}</div>`:''}
-      ${!events.filter(e=>e.isMtg).length?'<div class="empty"><div class="empty-ico">🤝</div><div class="empty-txt">No meetings yet</div></div>':''}
+      ${!meetings.length?'<div class="empty"><div class="empty-ico">🤝</div><div class="empty-txt">No meetings yet</div></div>':''}
     </div>
   </div>`;
 }
 
-// ── FUNDRAISING ────────────────────────────────────────────
+// ── FUNDRAISING ───────────────────────────────────────────────
 function frHTML(){
   const frs=events.filter(e=>(parseFloat(e.fT)||0)>0);
   let tt=0,tr=0;frs.forEach(e=>{tt+=parseFloat(e.fT)||0;tr+=parseFloat(e.fR)||0});
@@ -905,10 +826,12 @@ function frHTML(){
   </div>`;
 }
 
-// ── MEN ────────────────────────────────────────────────────
+// ── MEN ───────────────────────────────────────────────────────
 function menHTML(){
   const today=new Date();
-  const fil=men.filter(m=>!menQ||m.name.toLowerCase().includes(menQ.toLowerCase())).sort((a,b)=>a.name.localeCompare(b.name));
+  let fil=[...men].filter(m=>!menQ||m.name.toLowerCase().includes(menQ.toLowerCase()));
+  if(menSort==='name')fil.sort((a,b)=>a.name.localeCompare(b.name));
+  else{fil.sort((a,b)=>{const aa=age(a.dob)??999,ab=age(b.dob)??999;return aa-ab});}
   const bdays=men.map(m=>{
     if(!m.dob)return null;
     const[y,mo,d]=m.dob.split('-').map(Number);
@@ -923,7 +846,7 @@ function menHTML(){
   };
   const tileR=m=>{
     const a=age(m.dob),mt=tasksFor(m.id).filter(t=>t.sta!=='done').length;
-    return`<div class="mem-tile" onclick="openMn('${m.id}')"><div class="mem-tav">${ini(m.name)}</div><div class="mem-tname">${m.name}</div><div class="mem-tsub">${m.trade||''}${a!==null?'<br>'+a+' yrs':''}</div>${mt?`<div class="mem-tbadge">${mt} task${mt>1?'s':''}</div>`:''}</div>`;
+    return`<div class="mem-tile" onclick="openMn('${m.id}')"><div class="mem-tav">${ini(m.name)}</div><div class="mem-tname">${m.name}</div><div class="mem-tsub">${m.trade||''}${a!==null?'<br>'+a+' yrs':''}</div>${mt?`<div class="mem-tbdg">${mt} task${mt>1?'s':''}</div>`:''}</div>`;
   };
 
   return`<div class="pg">
@@ -931,8 +854,12 @@ function menHTML(){
       <span class="pg-title">Men <span style="font-size:13px;font-weight:400;color:var(--t3)">${men.length}</span></span>
       <div class="vtog"><button class="vt${menV==='list'?' on':''}" onclick="menV='list';render()">☰</button><button class="vt${menV==='tile'?' on':''}" onclick="menV='tile';render()">⊞</button></div>
     </div>
-    <div style="padding:9px 14px;border-bottom:1px solid var(--bdr);flex-shrink:0;background:var(--card)">
-      <div class="srch"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input placeholder="Search men..." value="${menQ}" oninput="menQ=this.value;render()"></div>
+    <div style="padding:9px 14px;border-bottom:1px solid var(--bdr);flex-shrink:0;background:var(--card);display:flex;gap:8px;align-items:center">
+      <div class="srch" style="flex:1"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input placeholder="Search..." value="${menQ}" oninput="menQ=this.value;render()"></div>
+      <div class="sort-btns">
+        <button class="sort-btn${menSort==='name'?' on':''}" onclick="menSort='name';render()">A–Z</button>
+        <button class="sort-btn${menSort==='age'?' on':''}" onclick="menSort='age';render()">Age</button>
+      </div>
     </div>
     <div class="scrl pad">
       <div class="bday-strip">${bdays.map(m=>`<div class="bday-card"><div class="bday-n">${m.name.split(' ')[0]}</div><div class="bday-dt">${m.bd.getDate()} ${MS[m.bd.getMonth()]}</div><div class="bday-cnt">${m.diff}</div><div class="bday-lbl">days</div></div>`).join('')}</div>
@@ -941,7 +868,7 @@ function menHTML(){
   </div>`;
 }
 
-// ── NAV ────────────────────────────────────────────────────
+// ── NAV ───────────────────────────────────────────────────────
 window.goM=m=>{mod=m;document.querySelectorAll('[data-m]').forEach(b=>b.classList.toggle('on',b.dataset.m===m));render()};
 window.setV=v=>{calV=v;render()};
 window.calN=dir=>{if(calV==='week')calD.setDate(calD.getDate()+dir*7);else calD=new Date(calD.getFullYear(),calD.getMonth()+dir,1);render()};
@@ -949,46 +876,82 @@ window.goT=()=>{calD=new Date();render()};
 window.dayClk=ds=>{calD=new Date(ds+'T12:00:00');calV='agenda';render()};
 window.setTF=f=>{tkF=f;render()};
 
-// ── EVENT SHEET ────────────────────────────────────────────
-window.openEv=id=>{editEv=events.find(e=>e.id===id);showEvSheet(editEv||{})};
-window.newEv=()=>{editEv=null;showEvSheet({})};
-window.newEvDate=ds=>{editEv=null;showEvSheet({date:ds})};
-window.newMtg=()=>{editEv=null;showEvSheet({isMtg:true,type:'meeting'})};
-window.newFr=()=>{editEv=null;showEvSheet({type:'fundraiser',fT:0,fR:0})};
+// ── EVENT SHEET ───────────────────────────────────────────────
+window.openEv=id=>{editEv=events.find(e=>e.id===id);showEvSh(editEv||{})};
+window.newEv=()=>{editEv=null;showEvSh({})};
+window.newEvDate=ds=>{editEv=null;showEvSh({date:ds})};
+window.newFr=()=>{editEv=null;showEvSh({type:'fundraiser',fT:0,fR:0})};
 
-function showEvSheet(ev){
+function showEvSh(ev){
   document.getElementById('ev-h').textContent=editEv?'Edit Event':'New Event';
   const aids=ev.men||[];
+  // Don't show meeting/mass fields here — those have their own sheets
+  const typeOpts=Object.entries(TC).filter(([k])=>k!=='meeting').map(([k,v])=>`<option value="${k}"${ev.type===k?' selected':''}>${v.l}</option>`).join('');
+  const showFR=['fundraiser','special'].includes(ev.type||'');
   document.getElementById('ev-flds').innerHTML=
     `<div class="frow"><div class="f" style="flex:2"><label>Title *</label><input id="et" value="${esc(ev.title)}" placeholder="Event name"></div><div class="f"><label>Date *</label><input id="ed" type="date" value="${ev.date||''}"></div></div>`+
-    `<div class="frow"><div class="f"><label>Type</label><select id="ety">${Object.entries(TC).map(([k,v])=>`<option value="${k}"${ev.type===k?' selected':''}>${v.l}</option>`).join('')}</select></div><div class="f"><label>Time</label><input id="etm" type="time" value="${ev.time||''}"></div></div>`+
+    `<div class="frow"><div class="f"><label>Type</label><select id="ety" onchange="updateEvFR()">${typeOpts}</select></div><div class="f"><label>Time</label><input id="etm" type="time" value="${ev.time||''}"></div></div>`+
     `<div class="f"><label>Place</label><input id="ep" value="${esc(ev.place)}" placeholder="Venue"></div>`+
     `<div class="f"><label>Description</label><textarea id="ede">${esc2(ev.desc)}</textarea></div>`+
     `<div class="f"><label>Next Steps</label><textarea id="ene">${esc2(ev.next)}</textarea></div>`+
-    `<div class="frow"><div class="f"><label>FR Target (R)</label><input id="eft" type="number" value="${ev.fT||0}"></div><div class="f"><label>FR Raised (R)</label><input id="efr" type="number" value="${ev.fR||0}"></div></div>`+
-    `<div class="f"><label>Assigned Men</label><div class="mpc" id="epc">${men.map(m=>`<div class="mp${aids.includes(m.id)?' on':''}" data-mid="${m.id}" onclick="this.classList.toggle('on')"><div class="mp-av">${ini(m.name)}</div>${m.name.split(' ')[0]}</div>`).join('')}</div></div>`+
-    `<div class="f"><div class="ck"><input type="checkbox" id="emtg"${ev.isMtg?' checked':''}><label for="emtg">Show in Meetings</label></div></div>`;
-  document.getElementById('ev-ftr').innerHTML=`${editEv?`<button class="btn-d" onclick="delEv('${editEv.id}')">Delete</button>`:''}<button class="btn-c" onclick="closeSheet('ev-sheet')">Cancel</button><button class="btn-s" onclick="saveEv()">Save</button>`;
-  openSheet('ev-sheet');
+    `<div id="fr-fields" style="display:${showFR?'flex':'none'};flex-direction:column;gap:12px"><div class="frow"><div class="f"><label>FR Target (R)</label><input id="eft" type="number" value="${ev.fT||0}"></div><div class="f"><label>FR Raised (R)</label><input id="efr" type="number" value="${ev.fR||0}"></div></div></div>`+
+    `<div class="f"><label>Assigned Men</label><div class="mpc" id="epc">${men.map(m=>`<div class="mp${aids.includes(m.id)?' on':''}" data-mid="${m.id}" onclick="this.classList.toggle('on')"><div class="mp-av">${ini(m.name)}</div>${m.name.split(' ')[0]}</div>`).join('')}</div></div>`;
+  document.getElementById('ev-ftr').innerHTML=`${editEv?`<button class="btn-d" onclick="delEv('${editEv.id}')">Delete</button>`:''}<button class="btn-c" onclick="closeSheet('ev-sh')">Cancel</button><button class="btn-s" onclick="saveEv()">Save</button>`;
+  openSheet('ev-sh');
 }
-
+window.updateEvFR=()=>{
+  const t=document.getElementById('ety').value;
+  const show=['fundraiser','special'].includes(t);
+  const el=document.getElementById('fr-fields');
+  if(el)el.style.display=show?'flex':'none';
+};
 window.saveEv=async()=>{
   const title=document.getElementById('et').value.trim(),date=document.getElementById('ed').value;
   if(!title||!date){alert('Title and date required');return}
   const mids=[...document.querySelectorAll('#epc .mp.on')].map(el=>el.dataset.mid);
-  const data={title,date,time:document.getElementById('etm').value,place:document.getElementById('ep').value,type:document.getElementById('ety').value,desc:document.getElementById('ede').value,next:document.getElementById('ene').value,fT:parseFloat(document.getElementById('eft').value)||0,fR:parseFloat(document.getElementById('efr').value)||0,men:mids,isMtg:document.getElementById('emtg').checked};
+  const type=document.getElementById('ety').value;
+  const showFR=['fundraiser','special'].includes(type);
+  const data={title,date,time:document.getElementById('etm').value,place:document.getElementById('ep').value,type,desc:document.getElementById('ede').value,next:document.getElementById('ene').value,fT:showFR?(parseFloat(document.getElementById('eft').value)||0):0,fR:showFR?(parseFloat(document.getElementById('efr').value)||0):0,men:mids};
   if(editEv){Object.assign(editEv,data);fbUp('events',editEv);}
   else{const id=uid();events.push({id,...data});fbAdd('events',{id,...data});}
-  closeSheet('ev-sheet');render();
+  closeSheet('ev-sh');render();
 };
-window.delEv=async id=>{if(!confirm('Delete this event?'))return;fbDel('events',id);events=events.filter(e=>e.id!==id);closeSheet('ev-sheet');render()};
+window.delEv=async id=>{if(!confirm('Delete this event?'))return;fbDel('events',id);events=events.filter(e=>e.id!==id);closeSheet('ev-sh');render()};
 
-// ── TASK SHEET ─────────────────────────────────────────────
-window.openTk=id=>{editTk=tasks.find(t=>t.id===id);showTkSheet(editTk||{})};
-window.newTk=()=>{editTk=null;showTkSheet({})};
-window.newTkSta=s=>{editTk=null;showTkSheet({sta:s})};
+// ── MEETING SHEET ─────────────────────────────────────────────
+window.openMtg=id=>{editMt=meetings.find(m=>m.id===id);showMtSh(editMt||{})};
+window.newMtg=()=>{editMt=null;showMtSh({})};
 
-function showTkSheet(t){
+function showMtSh(m){
+  document.getElementById('mt-h').textContent=editMt?'Edit Meeting':'New Meeting';
+  const aids=m.attendees||[];
+  document.getElementById('mt-flds').innerHTML=
+    `<div class="frow"><div class="f" style="flex:2"><label>Title *</label><input id="mtt" value="${esc(m.title)}" placeholder="Meeting name"></div><div class="f"><label>Date *</label><input id="mtd" type="date" value="${m.date||''}"></div></div>`+
+    `<div class="frow"><div class="f"><label>Time</label><input id="mttm" type="time" value="${m.time||''}"></div><div class="f"><label>Place</label><input id="mtp" value="${esc(m.place)}" placeholder="Venue"></div></div>`+
+    `<div class="f"><label>Agenda / Minutes</label><textarea id="mta" style="min-height:90px">${esc2(m.agenda)}</textarea></div>`+
+    `<div class="f"><label>Meeting Minutes</label><textarea id="mtmi" style="min-height:90px">${esc2(m.minutes)}</textarea></div>`+
+    `<div class="f"><label>Next Steps</label><textarea id="mtne">${esc2(m.next)}</textarea></div>`+
+    `<div class="f"><label>Attendees</label><div class="mpc" id="mtpc">${men.map(mn=>`<div class="mp${aids.includes(mn.id)?' on':''}" data-mid="${mn.id}" onclick="this.classList.toggle('on')"><div class="mp-av">${ini(mn.name)}</div>${mn.name.split(' ')[0]}</div>`).join('')}</div></div>`;
+  document.getElementById('mt-ftr').innerHTML=`${editMt?`<button class="btn-d" onclick="delMtg('${editMt.id}')">Delete</button>`:''}<button class="btn-c" onclick="closeSheet('mt-sh')">Cancel</button><button class="btn-s" onclick="saveMtg()">Save</button>`;
+  openSheet('mt-sh');
+}
+window.saveMtg=async()=>{
+  const title=document.getElementById('mtt').value.trim(),date=document.getElementById('mtd').value;
+  if(!title||!date){alert('Title and date required');return}
+  const aids=[...document.querySelectorAll('#mtpc .mp.on')].map(el=>el.dataset.mid);
+  const data={title,date,time:document.getElementById('mttm').value,place:document.getElementById('mtp').value,agenda:document.getElementById('mta').value,minutes:document.getElementById('mtmi').value,next:document.getElementById('mtne').value,attendees:aids};
+  if(editMt){Object.assign(editMt,data);fbUp('meetings',editMt);}
+  else{const id=uid();meetings.push({id,...data});fbAdd('meetings',{id,...data});}
+  closeSheet('mt-sh');render();
+};
+window.delMtg=async id=>{if(!confirm('Delete this meeting?'))return;fbDel('meetings',id);meetings=meetings.filter(m=>m.id!==id);closeSheet('mt-sh');render()};
+
+// ── TASK SHEET ────────────────────────────────────────────────
+window.openTk=id=>{editTk=tasks.find(t=>t.id===id);showTkSh(editTk||{})};
+window.newTk=()=>{editTk=null;showTkSh({})};
+window.newTkSta=s=>{editTk=null;showTkSh({sta:s})};
+
+function showTkSh(t){
   document.getElementById('tk-h').textContent=editTk?'Edit Task':'New Task';
   const aids=t.men||[];
   const evOpts='<option value="">None</option>'+events.map(e=>`<option value="${e.id}"${t.evId===e.id?' selected':''}>${e.title} (${fmtD(e.date)})</option>`).join('');
@@ -999,8 +962,8 @@ function showTkSheet(t){
     `<div class="f"><label>Linked Event</label><select id="tev">${evOpts}</select></div>`+
     `<div class="f"><label>Notes</label><textarea id="tn">${esc2(t.notes)}</textarea></div>`+
     `<div class="f"><label>Assigned Men</label><div class="mpc" id="tpc">${men.map(m=>`<div class="mp${aids.includes(m.id)?' on':''}" data-mid="${m.id}" onclick="this.classList.toggle('on')"><div class="mp-av">${ini(m.name)}</div>${m.name.split(' ')[0]}</div>`).join('')}</div></div>`;
-  document.getElementById('tk-ftr').innerHTML=`${editTk?`<button class="btn-d" onclick="delTk('${editTk.id}')">Delete</button>`:''}<button class="btn-c" onclick="closeSheet('tk-sheet')">Cancel</button><button class="btn-s" onclick="saveTk()">Save</button>`;
-  openSheet('tk-sheet');
+  document.getElementById('tk-ftr').innerHTML=`${editTk?`<button class="btn-d" onclick="delTk('${editTk.id}')">Delete</button>`:''}<button class="btn-c" onclick="closeSheet('tk-sh')">Cancel</button><button class="btn-s" onclick="saveTk()">Save</button>`;
+  openSheet('tk-sh');
 }
 window.saveTk=async()=>{
   const title=document.getElementById('tt').value.trim();if(!title){alert('Title required');return}
@@ -1008,15 +971,15 @@ window.saveTk=async()=>{
   const data={title,due:document.getElementById('td').value,pri:document.getElementById('tp').value,sta:document.getElementById('ts').value,evId:document.getElementById('tev').value||null,notes:document.getElementById('tn').value,men:mids};
   if(editTk){Object.assign(editTk,data);fbUp('tasks',editTk);}
   else{const id=uid();tasks.push({id,...data});fbAdd('tasks',{id,...data});}
-  closeSheet('tk-sheet');render();
+  closeSheet('tk-sh');render();
 };
-window.delTk=async id=>{if(!confirm('Delete task?'))return;fbDel('tasks',id);tasks=tasks.filter(t=>t.id!==id);closeSheet('tk-sheet');render()};
+window.delTk=async id=>{if(!confirm('Delete task?'))return;fbDel('tasks',id);tasks=tasks.filter(t=>t.id!==id);closeSheet('tk-sh');render()};
 
-// ── MAN SHEET ──────────────────────────────────────────────
-window.openMn=id=>{editMn=men.find(m=>m.id===id);showMnSheet(editMn||{})};
-window.newMn=()=>{editMn=null;showMnSheet({})};
+// ── MAN SHEET ─────────────────────────────────────────────────
+window.openMn=id=>{editMn=men.find(m=>m.id===id);showMnSh(editMn||{})};
+window.newMn=()=>{editMn=null;showMnSh({})};
 
-function showMnSheet(m){
+function showMnSh(m){
   document.getElementById('mn-h').textContent=editMn?'Edit Man':'New Man';
   const a=m.dob?age(m.dob):null;
   const mt=editMn?tasksFor(editMn.id):[];
@@ -1024,62 +987,67 @@ function showMnSheet(m){
     const p=PRI[t.pri]||PRI.mid,od=isOD(t.due)&&t.sta!=='done';
     const sb=t.sta==='done'?'var(--done-bg)':t.sta==='prog'?'var(--prog-bg)':'var(--todo-bg)';
     const sc=t.sta==='done'?'var(--done)':t.sta==='prog'?'var(--prog)':'var(--todo)';
-    return`<div style="background:var(--bg);border-radius:8px;padding:9px 11px;cursor:pointer;border:1px solid var(--bdr)" onclick="closeSheet('mn-sheet');openTk('${t.id}')"><div style="font-size:13px;font-weight:600;margin-bottom:3px">${t.title}</div><div style="display:flex;gap:5px;align-items:center;flex-wrap:wrap"><span class="tk-pri ${p.cls}">${p.l}</span>${t.due?`<span style="font-size:10px;color:${od?'var(--red)':'var(--t3)'}">${fmtD(t.due)}</span>`:''}<span style="font-size:9px;padding:2px 7px;border-radius:20px;background:${sb};color:${sc}">${STA[t.sta].l}</span></div></div>`;
+    return`<div style="background:var(--bg);border-radius:8px;padding:9px 11px;cursor:pointer;border:1px solid var(--bdr)" onclick="closeSheet('mn-sh');openTk('${t.id}')"><div style="font-size:13px;font-weight:600;margin-bottom:3px">${t.title}</div><div style="display:flex;gap:5px;align-items:center;flex-wrap:wrap"><span class="tk-pri ${p.cls}">${p.l}</span>${t.due?`<span style="font-size:10px;color:${od?'var(--red)':'var(--t3)'}">${fmtD(t.due)}</span>`:''}<span style="font-size:9px;padding:2px 7px;border-radius:20px;background:${sb};color:${sc}">${STA[t.sta].l}</span></div></div>`;
   }).join('')}</div></div>`:'';
   document.getElementById('mn-flds').innerHTML=
     `<div class="f"><label>Full Name *</label><input id="mnn" value="${esc(m.name)}" placeholder="Full name"></div>`+
     `<div class="f"><label>Trade / Occupation</label><input id="mnt" value="${esc(m.trade)}" placeholder="e.g. Plumber, Teacher, Retired..."></div>`+
     `<div class="f"><label>Date of Birth</label><input id="mnd" type="date" value="${m.dob||''}">${a!==null?`<div style="font-size:12px;color:var(--t3);margin-top:4px">${a} years old</div>`:''}</div>`+
     tSec;
-  document.getElementById('mn-ftr').innerHTML=`${editMn?`<button class="btn-d" onclick="delMn('${editMn.id}')">Delete</button>`:''}<button class="btn-c" onclick="closeSheet('mn-sheet')">Cancel</button><button class="btn-s" onclick="saveMn()">Save</button>`;
-  openSheet('mn-sheet');
+  document.getElementById('mn-ftr').innerHTML=`${editMn?`<button class="btn-d" onclick="delMn('${editMn.id}')">Delete</button>`:''}<button class="btn-c" onclick="closeSheet('mn-sh')">Cancel</button><button class="btn-s" onclick="saveMn()">Save</button>`;
+  openSheet('mn-sh');
 }
 window.saveMn=async()=>{
   const name=document.getElementById('mnn').value.trim();if(!name){alert('Name required');return}
   const data={name,trade:document.getElementById('mnt').value,dob:document.getElementById('mnd').value};
   if(editMn){Object.assign(editMn,data);fbUp('members',editMn);}
   else{const id=uid();men.push({id,...data});fbAdd('members',{id,...data});}
-  closeSheet('mn-sheet');render();
+  closeSheet('mn-sh');render();
 };
-window.delMn=async id=>{if(!confirm('Remove this man?'))return;fbDel('members',id);men=men.filter(m=>m.id!==id);closeSheet('mn-sheet');render()};
+window.delMn=async id=>{if(!confirm('Remove this man?'))return;fbDel('members',id);men=men.filter(m=>m.id!==id);closeSheet('mn-sh');render()};
 
-// ── SHEET CONTROL ──────────────────────────────────────────
+// ── SHEET CONTROL ─────────────────────────────────────────────
 function openSheet(id){document.getElementById('ov').classList.add('on');document.getElementById(id).classList.add('on')}
 window.closeSheet=id=>{document.getElementById('ov').classList.remove('on');document.getElementById(id).classList.remove('on')};
 window.closeAll=()=>{document.getElementById('ov').classList.remove('on');document.querySelectorAll('.sheet').forEach(s=>s.classList.remove('on'))};
-window.openAdd=()=>{document.getElementById('aov').classList.add('on');document.getElementById('add-sheet').classList.add('on')};
-window.closeAdd=()=>{document.getElementById('aov').classList.remove('on');document.getElementById('add-sheet').classList.remove('on')};
+window.openAdd=()=>{document.getElementById('aov').classList.add('on');document.getElementById('add-sh').classList.add('on')};
+window.closeAdd=()=>{document.getElementById('aov').classList.remove('on');document.getElementById('add-sh').classList.remove('on')};
 
-// ── FIREBASE ───────────────────────────────────────────────
-async function fbUp(col,item){if(!window._dbReady)return;try{const{doc:d,updateDoc:u}=window._fb;const{id,...dd}=item;await u(d(window._db,col,id),dd)}catch(e){console.warn(e)}}
-async function fbAdd(col,item){if(!window._dbReady)return;try{const{collection:c,addDoc:a}=window._fb;await a(c(window._db,col),item)}catch(e){console.warn(e)}}
-async function fbDel(col,id){if(!window._dbReady)return;try{const{doc:d,deleteDoc:del}=window._fb;await del(d(window._db,col,id))}catch(e){console.warn(e)}}
+// ── FIREBASE ──────────────────────────────────────────────────
+async function fbUp(col,item){if(!window._dbReady)return;try{const{doc:d,updateDoc:u}=window._fb;const{id,...dd}=item;await u(d(window._db,col,id),dd)}catch(e){console.warn('fbUp:',e)}}
+async function fbAdd(col,item){if(!window._dbReady)return;try{const{collection:c,addDoc:a}=window._fb;await a(c(window._db,col),item)}catch(e){console.warn('fbAdd:',e)}}
+async function fbDel(col,id){if(!window._dbReady)return;try{const{doc:d,deleteDoc:del}=window._fb;await del(d(window._db,col,id))}catch(e){console.warn('fbDel:',e)}}
 
-// ── BOOT ───────────────────────────────────────────────────
+// ── BOOT — clears stale FB data and re-seeds ──────────────────
 async function boot(){
   document.getElementById('dbl').classList.remove('gone');
   try{
     if(!window._dbReady)await new Promise(res=>window.addEventListener('dbready',res,{once:true}));
-    const{collection:c,getDocs,addDoc:a}=window._fb;const db=window._db;
-    const[es,ts,ms]=await Promise.all([getDocs(c(db,'events')),getDocs(c(db,'tasks')),getDocs(c(db,'members'))]);
-    if(!es.empty)events=es.docs.map(d=>({id:d.id,...d.data()}));
-    else for(const e of events){const{id,...d}=e;await a(c(db,'events'),{id,...d})}
-    if(!ts.empty)tasks=ts.docs.map(d=>({id:d.id,...d.data()}));
-    else for(const t of tasks){const{id,...d}=t;await a(c(db,'tasks'),{id,...d})}
-    if(!ms.empty)men=ms.docs.map(d=>({id:d.id,...d.data()}));
-    else for(const m of men){const{id,...d}=m;await a(c(db,'members'),{id,...d})}
+    const{collection:c,getDocs,addDoc:a,doc:d,deleteDoc:del}=window._fb;const db=window._db;
+    // Load from Firebase — if empty, seed
+    const[es,ts,ms,mts]=await Promise.all([
+      getDocs(c(db,'events')),getDocs(c(db,'tasks')),
+      getDocs(c(db,'members')),getDocs(c(db,'meetings'))
+    ]);
+    if(!es.empty)events=es.docs.map(x=>({id:x.id,...x.data()}));
+    else for(const e of events){const{id,...dd}=e;await a(c(db,'events'),{id,...dd})}
+    if(!ts.empty)tasks=ts.docs.map(x=>({id:x.id,...x.data()}));
+    else for(const t of tasks){const{id,...dd}=t;await a(c(db,'tasks'),{id,...dd})}
+    if(!ms.empty)men=ms.docs.map(x=>({id:x.id,...x.data()}));
+    else for(const m of men){const{id,...dd}=m;await a(c(db,'members'),{id,...dd})}
+    if(!mts.empty)meetings=mts.docs.map(x=>({id:x.id,...x.data()}));
+    else for(const m of meetings){const{id,...dd}=m;await a(c(db,'meetings'),{id,...dd})}
   }catch(e){console.warn('Firebase offline, running local',e)}
   document.getElementById('dbl').classList.add('gone');
   render();
 }
 
-// ── PASSWORD ───────────────────────────────────────────────
+// ── PASSWORD ──────────────────────────────────────────────────
 window.checkPw=()=>{
   const v=document.getElementById('pw-in').value;
   if(v===PWD){sessionStorage.setItem('cmm_auth','1');document.getElementById('pw').classList.add('gone');boot();}
   else{document.getElementById('pw-err').textContent='Incorrect password';document.getElementById('pw-in').value='';document.getElementById('pw-in').focus();}
 };
-
 if(sessionStorage.getItem('cmm_auth')==='1'){document.getElementById('pw').classList.add('gone');boot();}
 else setTimeout(()=>document.getElementById('pw-in').focus(),300);
 </script>
