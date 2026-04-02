@@ -10,10 +10,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import{getFirestore,collection,getDocs,addDoc,doc,updateDoc,deleteDoc}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import{getFirestore,collection,getDocs,addDoc,doc,setDoc,updateDoc,deleteDoc}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 const FB={apiKey:"AIzaSyAMZ-4sggqB4X0jj3i7RercY2DjCiIZwcg",authDomain:"holy-redeemer-cmm-calendar.firebaseapp.com",projectId:"holy-redeemer-cmm-calendar",storageBucket:"holy-redeemer-cmm-calendar.firebasestorage.app",messagingSenderId:"397429201163",appId:"1:397429201163:web:5644262892b1939a16ea0e"};
 const app=initializeApp(FB);const db=getFirestore(app);
-window._db=db;window._fb={collection,getDocs,addDoc,doc,updateDoc,deleteDoc};
+window._db=db;window._fb={collection,getDocs,addDoc,doc,setDoc,updateDoc,deleteDoc};
 window._dbReady=true;window.dispatchEvent(new Event('dbready'));
 </script>
 <style>
@@ -912,11 +912,11 @@ window.saveEv=async()=>{
   const type=document.getElementById('ety').value;
   const showFR=['fundraiser','special'].includes(type);
   const data={title,date,time:document.getElementById('etm').value,place:document.getElementById('ep').value,type,desc:document.getElementById('ede').value,next:document.getElementById('ene').value,fT:showFR?(parseFloat(document.getElementById('eft').value)||0):0,fR:showFR?(parseFloat(document.getElementById('efr').value)||0):0,men:mids};
-  if(editEv){Object.assign(editEv,data);fbUp('events',editEv);}
-  else{const id=uid();events.push({id,...data});fbAdd('events',{id,...data});}
+  if(editEv){Object.assign(editEv,data);fbSave('events',editEv);}
+  else{const id=uid();const item={id,...data};events.push(item);fbSave('events',item);}
   closeSheet('ev-sh');render();
 };
-window.delEv=async id=>{if(!confirm('Delete this event?'))return;fbDel('events',id);events=events.filter(e=>e.id!==id);closeSheet('ev-sh');render()};
+window.delEv=async id=>{if(!confirm('Delete this event?'))return;await fbDel('events',id);events=events.filter(e=>e.id!==id);closeSheet('ev-sh');render()};
 
 // ── MEETING SHEET ─────────────────────────────────────────────
 window.openMtg=id=>{editMt=meetings.find(m=>m.id===id);showMtSh(editMt||{})};
@@ -940,11 +940,11 @@ window.saveMtg=async()=>{
   if(!title||!date){alert('Title and date required');return}
   const aids=[...document.querySelectorAll('#mtpc .mp.on')].map(el=>el.dataset.mid);
   const data={title,date,time:document.getElementById('mttm').value,place:document.getElementById('mtp').value,agenda:document.getElementById('mta').value,minutes:document.getElementById('mtmi').value,next:document.getElementById('mtne').value,attendees:aids};
-  if(editMt){Object.assign(editMt,data);fbUp('meetings',editMt);}
-  else{const id=uid();meetings.push({id,...data});fbAdd('meetings',{id,...data});}
+  if(editMt){Object.assign(editMt,data);fbSave('meetings',editMt);}
+  else{const id=uid();const item={id,...data};meetings.push(item);fbSave('meetings',item);}
   closeSheet('mt-sh');render();
 };
-window.delMtg=async id=>{if(!confirm('Delete this meeting?'))return;fbDel('meetings',id);meetings=meetings.filter(m=>m.id!==id);closeSheet('mt-sh');render()};
+window.delMtg=async id=>{if(!confirm('Delete this meeting?'))return;await fbDel('meetings',id);meetings=meetings.filter(m=>m.id!==id);closeSheet('mt-sh');render()};
 
 // ── TASK SHEET ────────────────────────────────────────────────
 window.openTk=id=>{editTk=tasks.find(t=>t.id===id);showTkSh(editTk||{})};
@@ -969,11 +969,11 @@ window.saveTk=async()=>{
   const title=document.getElementById('tt').value.trim();if(!title){alert('Title required');return}
   const mids=[...document.querySelectorAll('#tpc .mp.on')].map(el=>el.dataset.mid);
   const data={title,due:document.getElementById('td').value,pri:document.getElementById('tp').value,sta:document.getElementById('ts').value,evId:document.getElementById('tev').value||null,notes:document.getElementById('tn').value,men:mids};
-  if(editTk){Object.assign(editTk,data);fbUp('tasks',editTk);}
-  else{const id=uid();tasks.push({id,...data});fbAdd('tasks',{id,...data});}
+  if(editTk){Object.assign(editTk,data);fbSave('tasks',editTk);}
+  else{const id=uid();const item={id,...data};tasks.push(item);fbSave('tasks',item);}
   closeSheet('tk-sh');render();
 };
-window.delTk=async id=>{if(!confirm('Delete task?'))return;fbDel('tasks',id);tasks=tasks.filter(t=>t.id!==id);closeSheet('tk-sh');render()};
+window.delTk=async id=>{if(!confirm('Delete task?'))return;await fbDel('tasks',id);tasks=tasks.filter(t=>t.id!==id);closeSheet('tk-sh');render()};
 
 // ── MAN SHEET ─────────────────────────────────────────────────
 window.openMn=id=>{editMn=men.find(m=>m.id===id);showMnSh(editMn||{})};
@@ -1000,11 +1000,11 @@ function showMnSh(m){
 window.saveMn=async()=>{
   const name=document.getElementById('mnn').value.trim();if(!name){alert('Name required');return}
   const data={name,trade:document.getElementById('mnt').value,dob:document.getElementById('mnd').value};
-  if(editMn){Object.assign(editMn,data);fbUp('members',editMn);}
-  else{const id=uid();men.push({id,...data});fbAdd('members',{id,...data});}
+  if(editMn){Object.assign(editMn,data);fbSave('members',editMn);}
+  else{const id=uid();const item={id,...data};men.push(item);fbSave('members',item);}
   closeSheet('mn-sh');render();
 };
-window.delMn=async id=>{if(!confirm('Remove this man?'))return;fbDel('members',id);men=men.filter(m=>m.id!==id);closeSheet('mn-sh');render()};
+window.delMn=async id=>{if(!confirm('Remove this man?'))return;await fbDel('members',id);men=men.filter(m=>m.id!==id);closeSheet('mn-sh');render()};
 
 // ── SHEET CONTROL ─────────────────────────────────────────────
 function openSheet(id){document.getElementById('ov').classList.add('on');document.getElementById(id).classList.add('on')}
@@ -1014,30 +1014,80 @@ window.openAdd=()=>{document.getElementById('aov').classList.add('on');document.
 window.closeAdd=()=>{document.getElementById('aov').classList.remove('on');document.getElementById('add-sh').classList.remove('on')};
 
 // ── FIREBASE ──────────────────────────────────────────────────
-async function fbUp(col,item){if(!window._dbReady)return;try{const{doc:d,updateDoc:u}=window._fb;const{id,...dd}=item;await u(d(window._db,col,id),dd)}catch(e){console.warn('fbUp:',e)}}
-async function fbAdd(col,item){if(!window._dbReady)return;try{const{collection:c,addDoc:a}=window._fb;await a(c(window._db,col),item)}catch(e){console.warn('fbAdd:',e)}}
-async function fbDel(col,id){if(!window._dbReady)return;try{const{doc:d,deleteDoc:del}=window._fb;await del(d(window._db,col,id))}catch(e){console.warn('fbDel:',e)}}
+// Rule: Firestore document ID IS the item id. We always use setDoc
+// so we control the ID. Never use addDoc (which generates a new ID).
 
-// ── BOOT — clears stale FB data and re-seeds ──────────────────
-async function boot(){
+async function fbSave(col, item) {
+  if (!window._dbReady) return;
+  try {
+    const { doc: docRef, setDoc } = window._fb;
+    const { id, ...data } = item;
+    await setDoc(docRef(window._db, col, id), data);
+  } catch (e) { console.warn('fbSave error:', col, e); }
+}
+
+async function fbDel(col, id) {
+  if (!window._dbReady) return;
+  try {
+    const { doc: docRef, deleteDoc } = window._fb;
+    await deleteDoc(docRef(window._db, col, id));
+  } catch (e) { console.warn('fbDel error:', col, e); }
+}
+
+async function fbLoad(col) {
+  if (!window._dbReady) return null;
+  try {
+    const { collection, getDocs } = window._fb;
+    const snap = await getDocs(collection(window._db, col));
+    // Firestore doc.id is the true ID — merge it back as item.id
+    return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  } catch (e) { console.warn('fbLoad error:', col, e); return null; }
+}
+
+// ── BOOT ──────────────────────────────────────────────────────
+async function boot() {
   document.getElementById('dbl').classList.remove('gone');
-  try{
-    if(!window._dbReady)await new Promise(res=>window.addEventListener('dbready',res,{once:true}));
-    const{collection:c,getDocs,addDoc:a,doc:d,deleteDoc:del}=window._fb;const db=window._db;
-    // Load from Firebase — if empty, seed
-    const[es,ts,ms,mts]=await Promise.all([
-      getDocs(c(db,'events')),getDocs(c(db,'tasks')),
-      getDocs(c(db,'members')),getDocs(c(db,'meetings'))
-    ]);
-    if(!es.empty)events=es.docs.map(x=>({id:x.id,...x.data()}));
-    else for(const e of events){const{id,...dd}=e;await a(c(db,'events'),{id,...dd})}
-    if(!ts.empty)tasks=ts.docs.map(x=>({id:x.id,...x.data()}));
-    else for(const t of tasks){const{id,...dd}=t;await a(c(db,'tasks'),{id,...dd})}
-    if(!ms.empty)men=ms.docs.map(x=>({id:x.id,...x.data()}));
-    else for(const m of men){const{id,...dd}=m;await a(c(db,'members'),{id,...dd})}
-    if(!mts.empty)meetings=mts.docs.map(x=>({id:x.id,...x.data()}));
-    else for(const m of meetings){const{id,...dd}=m;await a(c(db,'meetings'),{id,...dd})}
-  }catch(e){console.warn('Firebase offline, running local',e)}
+
+  if (window._dbReady) {
+    try {
+      if (!window._dbReady) await new Promise(res => window.addEventListener('dbready', res, { once: true }));
+
+      // Load all collections from Firebase
+      const [fbEvents, fbTasks, fbMen, fbMtgs] = await Promise.all([
+        fbLoad('events'), fbLoad('tasks'), fbLoad('members'), fbLoad('meetings')
+      ]);
+
+      // If Firebase has data use it; otherwise seed from local defaults
+      if (fbEvents && fbEvents.length > 0) {
+        events = fbEvents;
+      } else {
+        // Seed: use setDoc so ID in Firestore matches item.id
+        for (const e of events) await fbSave('events', e);
+      }
+
+      if (fbTasks && fbTasks.length > 0) {
+        tasks = fbTasks;
+      } else {
+        for (const t of tasks) await fbSave('tasks', t);
+      }
+
+      if (fbMen && fbMen.length > 0) {
+        men = fbMen;
+      } else {
+        for (const m of men) await fbSave('members', m);
+      }
+
+      if (fbMtgs && fbMtgs.length > 0) {
+        meetings = fbMtgs;
+      } else {
+        for (const m of meetings) await fbSave('meetings', m);
+      }
+
+    } catch (e) {
+      console.warn('Firebase boot failed, running offline:', e);
+    }
+  }
+
   document.getElementById('dbl').classList.add('gone');
   render();
 }
